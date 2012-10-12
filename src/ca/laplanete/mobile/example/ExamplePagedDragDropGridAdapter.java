@@ -42,8 +42,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import ca.laplanete.mobile.pageddragdropgrid.PagedDragDropGridAdapter;
 
-
-
 public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter {
 
 	private Context context;
@@ -162,7 +160,6 @@ public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter
 			}
 		}
 	}
-
 
 	private Page getPage(int pageIndex) {
 		return pages.get(pageIndex);

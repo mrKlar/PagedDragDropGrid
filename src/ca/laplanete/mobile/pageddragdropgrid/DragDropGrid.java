@@ -279,7 +279,6 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		cancelEdgeTimer();
 		
 		if (onLeftEdge && container.canScrollLeft()) {
-
 			moveItemToPageOnLeft(dragged);	
 			moveDraggedToPageOnLeft();
 									
@@ -487,7 +486,6 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		int x = (getCurrentPage() * gridPageWidth) + (columnWidthSize * col);
 		int y = rowHeightSize * row;
 		
-	
 		return new Point(x, y);
 	}
 
@@ -752,7 +750,6 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		this.container = container;
 	}
 
-	
 	private int getViewIndex(int pageIndex, int childIndex) {
 		int currentGlobalIndex = 0;
 		for (int currentPageIndex = 0; currentPageIndex < adapter.pageCount(); currentPageIndex++) {
@@ -806,13 +803,10 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		}
 	}
 
-
 	private void moveItemToPageOnLeft(int itemIndex) {
 		ItemPosition itemPosition = getPageForItemAtAbsolutePosition(itemIndex);
 		adapter.moveItemToPageOnLeft(itemPosition.pageIndex,itemPosition.itemIndex);
-			
 	}
-
 
 	private void moveItemToPageOnRight(int itemIndex) {
 		ItemPosition itemPosition = getPageForItemAtAbsolutePosition(itemIndex);
@@ -828,6 +822,5 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 			this.pageIndex = pageIndex;
 			this.itemIndex = itemIndex;
 		}
-	}
-	
+	}	
 }

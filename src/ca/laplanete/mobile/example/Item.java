@@ -58,7 +58,4 @@ public class Item {
 		this.name = name;
 		this.drawable = drawable;
 	}
-	
-	
-	
 }

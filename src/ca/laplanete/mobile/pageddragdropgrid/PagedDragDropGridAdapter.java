@@ -38,7 +38,6 @@ public interface PagedDragDropGridAdapter {
 	 * @return the page count
 	 */
 	public int pageCount();
-	
 
 	/**
 	 * Returns the count of item in a page
@@ -71,7 +70,6 @@ public interface PagedDragDropGridAdapter {
 	 */
 	public int columnCount();
 
-	
 	/**
 	 * Prints the layout in Log.d();
 	 */
@@ -101,7 +99,4 @@ public interface PagedDragDropGridAdapter {
 	 * @param itemIndex
 	 */
 	public void moveItemToPageOnRight(int pageIndex, int itemIndex);
-
-	
-
 }
