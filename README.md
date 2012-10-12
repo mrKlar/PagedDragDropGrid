@@ -80,15 +80,15 @@ Define an adapter conforming to interface PagedDragDropGridAdapter.java
 
 layout example.xml
 ----------
-<ca.laplanete.mobile.pageddragdropgrid.PagedDragDropGrid xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/gridview"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" />
+	<ca.laplanete.mobile.pageddragdropgrid.PagedDragDropGrid xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:id="@+id/gridview"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"/>
     
     
 ExampleActivity.java
 -------------
-setContentView(R.layout.example);
-PagedDragDropGrid gridview = (PagedDragDropGrid) findViewById(R.id.gridview);		
-gridview.setAdapter(new ExamplePagedDragDropGridAdapter(this));
+	setContentView(R.layout.example);
+	PagedDragDropGrid gridview = (PagedDragDropGrid) findViewById(R.id.gridview);		
+	gridview.setAdapter(new ExamplePagedDragDropGridAdapter(this));
 
