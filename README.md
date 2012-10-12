@@ -94,12 +94,24 @@ ExampleActivity.java
 	PagedDragDropGrid gridview = (PagedDragDropGrid) findViewById(R.id.gridview);		
 	gridview.setAdapter(new ExamplePagedDragDropGridAdapter(this));
 
+Inspired by
+-----------
+
+https://github.com/thquinn/DraggableGridView
+and
+http://blahti.wordpress.com/2011/10/03/drag-drop-for-android-gridview/
+
 License
 -------
 
 	/**
- 	  * Copyright 2012 Nicolas Desjardins  
+ 	  * Copyright 2012 
+ 	  * 
+ 	  * Nicolas Desjardins  
  	  * https://github.com/laplanete79
+ 	  * 
+ 	  * Facilité solutions
+ 	  * http://www.facilitesolutions.com/
  	  * 
  	  * Permission is hereby granted, free of charge, to any person obtaining
  	  * a copy of this software and associated documentation files (the

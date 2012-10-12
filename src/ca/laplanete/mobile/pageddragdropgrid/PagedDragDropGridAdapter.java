@@ -1,6 +1,11 @@
 /**
- * Copyright 2012 Nicolas Desjardins  
+ * Copyright 2012 
+ * 
+ * Nicolas Desjardins  
  * https://github.com/laplanete79
+ * 
+ * Facilité solutions
+ * http://www.facilitesolutions.com/
  * 
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
