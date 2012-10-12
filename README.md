@@ -95,6 +95,7 @@ ExampleActivity.java
 	gridview.setAdapter(new ExamplePagedDragDropGridAdapter(this));
 
 License
+-------
 
 	/**
  	  * Copyright 2012 Nicolas Desjardins  
