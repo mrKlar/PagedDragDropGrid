@@ -65,7 +65,6 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 
 	private int gridPageWidth = 0;
 	private int dragged = -1;
-	private int currentTarget = -1;
 	private int columnWidthSize;
 	private int rowHeightSize;
 	private int biggestChildWidth;
