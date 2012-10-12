@@ -50,7 +50,7 @@ import android.view.animation.TranslateAnimation;
 
 public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongClickListener {
 
-	public static int ANIMATION_DURATION = 250;
+	private static int ANIMATION_DURATION = 250;
 	private static int EGDE_DETECTION_MARGIN = 35;
 
 	private PagedDragDropGridAdapter adapter;
@@ -60,7 +60,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 
 	private int gridPageWidth = 0;
 	private int dragged = -1;
-	public int currentTarget = -1;
+	private int currentTarget = -1;
 	private int columnWidthSize;
 	private int rowHeightSize;
 	private int biggestChildWidth;
@@ -74,7 +74,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private boolean isOnEdge = false;
 	private Timer edgeScrollTimer;
 	
-	final Handler edgeTimerHandler = new Handler();
+	final private Handler edgeTimerHandler = new Handler();
 	private int lastTouchX;
 	private int lastTouchY;
 
@@ -747,12 +747,9 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	public void setContainer(PagedDragDropGrid container) {
 		this.container = container;
 	}
+
 	
-	
-	
-	
-	
-	public int getViewIndex(int pageIndex, int childIndex) {
+	private int getViewIndex(int pageIndex, int childIndex) {
 		int currentGlobalIndex = 0;
 		for (int currentPageIndex = 0; currentPageIndex < adapter.pageCount(); currentPageIndex++) {
 			int itemCount = adapter.itemCountInPage(currentPageIndex);
@@ -767,24 +764,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		return -1;
 	}
 	
-	public List<Integer> absolutePositionOfItemsInPageContainingAbsolutePositionItem(int position) {
-		List<Integer> indexes = new ArrayList<Integer>();
-		int pageIndex = getPageIndexForAbsoluteItemPosition(position);
-		int currentGlobalIndex = 0;
-		for (int currentPageIndex = 0; currentPageIndex < adapter.pageCount(); currentPageIndex++) {
-			int itemCount = adapter.itemCountInPage(currentPageIndex);
-			for (int currentItemIndex = 0; currentItemIndex < itemCount; currentItemIndex++) {
-				if (pageIndex == currentPageIndex) {
-					indexes.add(currentGlobalIndex);
-				}
-				currentGlobalIndex++;				
-			}
-		}
-
-		return indexes;
-	}
-	
-	public int absolutePositionOfItemLocatedInPage(int pageIndex, int itemIndex) {
+	private int absolutePositionOfItemLocatedInPage(int pageIndex, int itemIndex) {
 		int currentGlobalIndex = 0;
 		for (int currentPageIndex = 0; currentPageIndex < adapter.pageCount(); currentPageIndex++) {
 			int itemCount = adapter.itemCountInPage(currentPageIndex);
@@ -799,22 +779,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		return -1;
 	}
 	
-	private int getPageIndexForAbsoluteItemPosition(int position) {
-		int currentGlobalIndex = 0;
-		for (int currentPageIndex = 0; currentPageIndex < adapter.pageCount(); currentPageIndex++) {
-			int itemCount = adapter.itemCountInPage(currentPageIndex);
-			for (int currentItemIndex = 0; currentItemIndex < itemCount; currentItemIndex++) {
-				if (currentGlobalIndex == position) {
-					return currentPageIndex;
-				}
-				currentGlobalIndex++;				
-			}
-		}
-
-		return -1;
-	}
-	
-	public ItemPosition getPageForItemAtAbsolutePosition(int position) {
+	private ItemPosition getPageForItemAtAbsolutePosition(int position) {
 		int currentGlobalIndex = 0;
 		for (int currentPageIndex = 0; currentPageIndex < adapter.pageCount(); currentPageIndex++) {
 			int itemCount = adapter.itemCountInPage(currentPageIndex);
@@ -827,12 +792,8 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		}
 		return null;
 	}
-	
-	public int itemIndexInPage(int absoluteIndex) {
-		return getPageIndexForAbsoluteItemPosition(absoluteIndex);
-	}
-	
-	public void swapDraggedWith(int dragged, int target) {
+
+	private void swapDraggedWith(int dragged, int target) {
 		
 		ItemPosition draggedItemPositionInPage = getPageForItemAtAbsolutePosition(dragged);
 		ItemPosition targetItemPositionInPage = getPageForItemAtAbsolutePosition(target);
@@ -842,19 +803,19 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 
-	public void moveItemToPageOnLeft(int itemIndex) {
+	private void moveItemToPageOnLeft(int itemIndex) {
 		ItemPosition itemPosition = getPageForItemAtAbsolutePosition(itemIndex);
 		adapter.moveItemToPageOnLeft(itemPosition.pageIndex,itemPosition.itemIndex);
 			
 	}
 
 
-	public void moveItemToPageOnRight(int itemIndex) {
+	private void moveItemToPageOnRight(int itemIndex) {
 		ItemPosition itemPosition = getPageForItemAtAbsolutePosition(itemIndex);
 		adapter.moveItemToPageOnRight(itemPosition.pageIndex,itemPosition.itemIndex);
 	}
 	
-	public class ItemPosition {
+	private class ItemPosition {
 		public int pageIndex;
 		public int itemIndex;
 		
