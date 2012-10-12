@@ -12,6 +12,7 @@ public class ExampleActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		
 		setContentView(R.layout.example);
 		PagedDragDropGrid gridview = (PagedDragDropGrid) findViewById(R.id.gridview);		
 		gridview.setAdapter(new ExamplePagedDragDropGridAdapter(this));

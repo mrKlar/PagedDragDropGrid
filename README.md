@@ -3,6 +3,8 @@ PagedDragDropGrid
 
 An Android ViewGroup that implements a paged grid with drag'n'drop movable items
 
+Example video: http://youtu.be/iCXZtPvP5Ec
+
 Usage:
 
 Define an adapter conforming to interface PagedDragDropGridAdapter.java
