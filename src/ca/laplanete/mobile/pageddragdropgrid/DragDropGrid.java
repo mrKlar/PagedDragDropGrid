@@ -761,7 +761,6 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 				currentGlobalIndex++;				
 			}
 		}
-
 		return -1;
 	}
 	
@@ -776,7 +775,6 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 				currentGlobalIndex++;				
 			}
 		}
-
 		return -1;
 	}
 	
