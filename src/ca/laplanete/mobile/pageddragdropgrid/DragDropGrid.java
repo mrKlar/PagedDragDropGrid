@@ -180,10 +180,12 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void touchUp() {
+		reorderChildren();
+		
 		manageDeleteZoneDrop(lastTouchX, lastTouchY);
 		hideDeleteView();
 		cancelEdgeTimer();
-		reorderChildren();
+		
 		movingView = false;
 		dragged = -1;
 		lastTarget = -1;
@@ -235,6 +237,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 			ItemPosition position = getPageForItemAtAbsolutePosition(dragged);
 			adapter.deleteItem(position.pageIndex,position.itemIndex);
 			removeViewAt(dragged);
+			deleteZone.smother();
 		} 
 	}
 
@@ -658,8 +661,10 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 			computedColumnCount = adapter.columnCount();
 			computedRowCount = adapter.rowCount();
 		} else {
-			computedColumnCount = widthSize / biggestChildWidth;			
-			computedRowCount = heightSize / biggestChildHeight;			
+			if (biggestChildWidth > 0 && biggestChildHeight > 0) {
+				computedColumnCount = widthSize / biggestChildWidth;			
+				computedRowCount = heightSize / biggestChildHeight;		
+			}
 		}
 		
 		if (computedColumnCount == 0) {
