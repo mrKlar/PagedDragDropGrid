@@ -88,6 +88,27 @@ public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter
 		items.add(new Item(22, "Item 22",R.drawable.ic_launcher));
 		items.add(new Item(23, "Item 23",R.drawable.ic_launcher));
 		items.add(new Item(24, "Item 24",R.drawable.ic_launcher));
+		items.add(new Item(25, "Item 25", R.drawable.ic_launcher));
+		items.add(new Item(26, "Item 26", R.drawable.ic_launcher));
+		items.add(new Item(27, "Item 27",R.drawable.ic_launcher));
+		items.add(new Item(28, "Item 28",R.drawable.ic_launcher));
+		items.add(new Item(29, "Item 29",R.drawable.ic_launcher));
+		items.add(new Item(30, "Item 30",R.drawable.ic_launcher));
+		items.add(new Item(31, "Item 31",R.drawable.ic_launcher));
+		items.add(new Item(32, "Item 32",R.drawable.ic_launcher));
+		items.add(new Item(33, "Item 33",R.drawable.ic_launcher));
+		items.add(new Item(34, "Item 34",R.drawable.ic_launcher));
+		items.add(new Item(35, "Item 35",R.drawable.ic_launcher));
+		items.add(new Item(36, "Item 36",R.drawable.ic_launcher));
+		items.add(new Item(37, "Item 37",R.drawable.ic_launcher));
+		items.add(new Item(38, "Item 38",R.drawable.ic_launcher));
+		items.add(new Item(39, "Item 39",R.drawable.ic_launcher));
+		items.add(new Item(40, "Item 40",R.drawable.ic_launcher));
+		items.add(new Item(41, "Item 41",R.drawable.ic_launcher));
+		items.add(new Item(42, "Item 42",R.drawable.ic_launcher));
+		items.add(new Item(43, "Item 43",R.drawable.ic_launcher));
+		items.add(new Item(44, "Item 44",R.drawable.ic_launcher));
+		items.add(new Item(45, "Item 45",R.drawable.ic_launcher));
 		page3.setItems(items);
 		pages.add(page3);
 	}
