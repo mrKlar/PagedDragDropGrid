@@ -57,4 +57,8 @@ public class Page {
 		items.remove(itemIndex);
 		return item;
 	}
+
+	public void deleteItem(int itemIndex) {
+		items.remove(itemIndex);
+	}
 }

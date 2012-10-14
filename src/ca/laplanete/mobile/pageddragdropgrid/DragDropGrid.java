@@ -36,6 +36,7 @@ import java.util.TimerTask;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -179,6 +180,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void touchUp() {
+		manageDeleteZoneDrop(lastTouchX, lastTouchY);
 		hideDeleteView();
 		cancelEdgeTimer();
 		reorderChildren();
@@ -210,7 +212,30 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 			moveDraggedView(lastTouchX, lastTouchY);
 			manageSwapPosition(lastTouchX, lastTouchY);
 			manageEdgeCoordinates(lastTouchX);
+			manageDeleteZoneHover(lastTouchX, lastTouchY);
 		}
+	}
+
+	private void manageDeleteZoneHover(int x, int y) {
+		Rect zone = new Rect();
+		deleteZone.getHitRect(zone);
+		
+		if (zone.intersect(x, y, x+1, y+1)) {
+			deleteZone.highlight();
+		} else {
+			deleteZone.smother();
+		}
+	}
+	
+	private void manageDeleteZoneDrop(int x, int y) {
+		Rect zone = new Rect();
+		deleteZone.getHitRect(zone);
+		
+		if (zone.intersect(x, y, x+1, y+1)) {
+			ItemPosition position = getPageForItemAtAbsolutePosition(dragged);
+			adapter.deleteItem(position.pageIndex,position.itemIndex);
+			removeViewAt(dragged);
+		} 
 	}
 
 	private void moveDraggedView(int x, int y) {

@@ -193,4 +193,10 @@ public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter
 			landingPage.addItem(item);			
 		}	
 	}
+
+	@Override
+	public void deleteItem(int pageIndex, int itemIndex) {
+		getPage(pageIndex).deleteItem(itemIndex);
+	}
+	
 }

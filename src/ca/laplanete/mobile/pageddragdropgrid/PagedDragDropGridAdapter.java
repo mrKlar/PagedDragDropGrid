@@ -99,4 +99,13 @@ public interface PagedDragDropGridAdapter {
 	 * @param itemIndex
 	 */
 	public void moveItemToPageOnRight(int pageIndex, int itemIndex);
+
+	
+	/**
+	 * deletes the item in page and at position
+	 * 
+	 * @param pageIndex
+	 * @param itemIndex
+	 */
+	public void deleteItem(int pageIndex, int itemIndex);
 }

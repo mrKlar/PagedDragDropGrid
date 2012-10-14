@@ -11,18 +11,23 @@ import android.view.View;
 
 public class DeleteDropZoneView extends View {
 
-	private Paint mTextPaint;
+	private Paint mTextPaintStraight;
+	private Paint mTextPaintRed;
+	private boolean straight = true;
 
 
 	public DeleteDropZoneView(Context context) {
 		super(context);
 		
-		mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mTextPaint.setColor(Color.WHITE);
-		mTextPaint.setStyle(Style.FILL); 
-
-	        
-		mTextPaint.setTextSize(20);
+		mTextPaintStraight = new Paint(Paint.ANTI_ALIAS_FLAG);
+		mTextPaintStraight.setColor(Color.WHITE);
+		mTextPaintStraight.setStyle(Style.FILL); 
+		mTextPaintStraight.setTextSize(20);
+		
+		mTextPaintRed = new Paint(Paint.ANTI_ALIAS_FLAG);
+		mTextPaintRed.setColor(Color.RED);
+		mTextPaintRed.setStyle(Style.FILL); 	    
+		mTextPaintRed.setTextSize(20);
 		
 		setBackgroundColor(Color.DKGRAY);
 		getBackground().setAlpha(70);	   
@@ -30,9 +35,22 @@ public class DeleteDropZoneView extends View {
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
-		   super.onDraw(canvas);
+		  super.onDraw(canvas);
+		 if (straight) {
+			 canvas.drawText(getResources().getString(R.string.removeItem), 10, 35, mTextPaintStraight);
+		 } else {
+			 canvas.drawText(getResources().getString(R.string.removeItem), 10, 35, mTextPaintRed);
+		 }
+	}
 
-		   canvas.drawText(getResources().getString(R.string.removeItem), 10, 35, mTextPaint);
+	public void highlight() {
+		straight = false;
+		invalidate();
+	}
+
+	public void smother() {
+		straight = true;
+		invalidate();
 	}
 	
 
