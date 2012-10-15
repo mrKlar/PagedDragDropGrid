@@ -81,8 +81,7 @@ public class DeleteDropZoneView extends View {
 		
 		setBackgroundColor(Color.BLACK);
 		getBackground().setAlpha(180); 
-		
-		
+
 	}
 	
 	@Override

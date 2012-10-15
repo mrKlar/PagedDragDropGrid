@@ -140,7 +140,6 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 				addView(adapter.view(page, item));
 			}
 		}
-		
 		deleteZone.bringToFront();
 	}
 

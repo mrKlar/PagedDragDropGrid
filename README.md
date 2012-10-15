@@ -7,7 +7,7 @@ Supports Android 2.2 (API 8) and up
 
 Tested on a Nexus One, Galaxy Nexus and a Nexus 7
 
-Example video: http://youtu.be/iCXZtPvP5Ec
+Example video: http://youtu.be/FYTSRfthSuQ
 
 Usage
 -----
