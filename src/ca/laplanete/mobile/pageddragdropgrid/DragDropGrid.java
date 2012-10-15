@@ -681,7 +681,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		computeGridMatrixSize(widthSize, heightSize);
 		computeColumnsAndRowsSizes(widthSize, heightSize);
 
-		measureChild(deleteZone, MeasureSpec.makeMeasureSpec(gridPageWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec((int)(gridPageHeight * 0.06f), MeasureSpec.EXACTLY));
+		measureChild(deleteZone, MeasureSpec.makeMeasureSpec(gridPageWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec((int)(gridPageHeight * 0.04f), MeasureSpec.EXACTLY));
 		
 		setMeasuredDimension(widthSize * adapter.pageCount(), heightSize);
 	}
@@ -828,8 +828,8 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		
 		deleteZone.setVisibility(View.VISIBLE);
 				
-		int l = getCurrentPage() * gridPageWidth;
-		int t = gridPageHeight - (int)(gridPageHeight * 0.06f);
+		int l = getCurrentPage() * deleteZone.getMeasuredWidth();
+		int t = gridPageHeight - deleteZone.getMeasuredHeight();
 		deleteZone.layout(l,  t, l + gridPageWidth, t + gridPageHeight);
 	}
 
