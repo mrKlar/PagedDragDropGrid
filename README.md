@@ -1,4 +1,4 @@
-PagedDragDropGrid
+PagedDragDropGrid v0.1
 =================
 
 An Android ViewGroup that implements a paged grid with drag'n'drop movable items
@@ -8,6 +8,9 @@ Supports Android 2.2 (API 8) and up
 Tested on a Nexus One, Galaxy Nexus and a Nexus 7
 
 Example video: http://youtu.be/FYTSRfthSuQ
+
+
+Note: The Master branch is in active development.
 
 Usage
 -----
