@@ -32,6 +32,7 @@ import android.view.View;
 
 public interface PagedDragDropGridAdapter {
 
+	public final static int AUTOMATIC = -1; 
 	/**
 	 * Used to create the paging
 	 * 
@@ -57,16 +58,16 @@ public interface PagedDragDropGridAdapter {
 	public View view(int page, int index);
 	
 	/**
-	 * The fixed row count (-1 for automatic computing)
+	 * The fixed row count (AUTOMATIC for automatic computing)
 	 * 
-	 * @return row count or -1
+	 * @return row count or AUTOMATIC
 	 */
 	public int rowCount();
 	
 	/**
-	 * The fixed column count (-1 for automatic computing)
+	 * The fixed column count (AUTOMATIC for automatic computing)
 	 * 
-	 * @return column count or -1
+	 * @return column count or AUTOMATIC
 	 */
 	public int columnCount();
 

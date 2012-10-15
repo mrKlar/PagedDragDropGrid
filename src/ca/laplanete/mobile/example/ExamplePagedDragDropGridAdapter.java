@@ -160,12 +160,12 @@ public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter
 
 	@Override
 	public int rowCount() {
-		return -1;
+		return AUTOMATIC;
 	}
 
 	@Override
 	public int columnCount() {
-		return -1;
+		return AUTOMATIC;
 	}
 
 	@Override

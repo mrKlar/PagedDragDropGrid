@@ -658,7 +658,6 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
 		int widthMode = MeasureSpec.getMode(widthMeasureSpec);
 		int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 		int widthSize = MeasureSpec.getSize(widthMeasureSpec);
