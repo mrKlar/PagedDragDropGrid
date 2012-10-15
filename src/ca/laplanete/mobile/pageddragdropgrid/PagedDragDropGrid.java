@@ -123,7 +123,7 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 	@Override
 	public void scrollLeft() {		
 		int newPage = mActivePage-1;
-		if (canScrollLeft()) {
+		if (canScrollToPreviousPage()) {
 			scrollToPage(newPage);
 		}
 	}
@@ -131,7 +131,7 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 	@Override
 	public void scrollRight() {
 		int newPage = mActivePage+1;
-		if (canScrollRight()) {		
+		if (canScrollToNextPage()) {		
 			scrollToPage(newPage);
 		}
 	}
@@ -152,13 +152,13 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 	}
 
 	@Override
-	public boolean canScrollRight() {
+	public boolean canScrollToNextPage() {
 		int newPage = mActivePage+1;
 		return (newPage < adapter.pageCount());
 	}
 
 	@Override
-	public boolean canScrollLeft() {
+	public boolean canScrollToPreviousPage() {
 		int newPage = mActivePage-1;
 		return (newPage >= 0);
 	}	

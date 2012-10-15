@@ -194,7 +194,7 @@ public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter
 	}
 
 	@Override
-	public void moveItemToPageOnLeft(int pageIndex, int itemIndex) {
+	public void moveItemToPreviousPage(int pageIndex, int itemIndex) {
 		int leftPageIndex = pageIndex-1;
 		if (leftPageIndex >= 0) {
 			Page startpage = getPage(pageIndex);
@@ -206,7 +206,7 @@ public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter
 	}
 
 	@Override
-	public void moveItemToPageOnRight(int pageIndex, int itemIndex) {
+	public void moveItemToNextPage(int pageIndex, int itemIndex) {
 		int rightPageIndex = pageIndex+1;
 		if (rightPageIndex < pageCount()) {
 			Page startpage = getPage(pageIndex);

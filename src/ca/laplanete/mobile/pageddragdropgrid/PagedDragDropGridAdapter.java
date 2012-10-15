@@ -90,7 +90,7 @@ public interface PagedDragDropGridAdapter {
 	 * @param pageIndex
 	 * @param itemIndex
 	 */
-	public void moveItemToPageOnLeft(int pageIndex, int itemIndex);
+	public void moveItemToPreviousPage(int pageIndex, int itemIndex);
 
 	/**
 	 * Moves an item in the page on the right of provided the page
@@ -98,7 +98,7 @@ public interface PagedDragDropGridAdapter {
 	 * @param pageIndex
 	 * @param itemIndex
 	 */
-	public void moveItemToPageOnRight(int pageIndex, int itemIndex);
+	public void moveItemToNextPage(int pageIndex, int itemIndex);
 
 	
 	/**

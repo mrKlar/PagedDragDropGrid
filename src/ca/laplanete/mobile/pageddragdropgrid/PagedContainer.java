@@ -70,12 +70,12 @@ public interface PagedContainer {
 	 * 
 	 * @return
 	 */
-	public boolean canScrollRight();
+	public boolean canScrollToNextPage();
 
 	/**
 	 * Returns true if there is a page at left of current page
 	 * 
 	 * @return 
 	 */
-	public boolean canScrollLeft();
+	public boolean canScrollToPreviousPage();
 }
