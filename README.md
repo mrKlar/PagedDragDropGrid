@@ -78,7 +78,7 @@ Define an adapter conforming to interface PagedDragDropGridAdapter.java
 		 * @param pageIndex
 		 * @param itemIndex
 		 */
-		public void moveItemToPageOnLeft(int pageIndex, int itemIndex);
+		public void moveItemToPreviousPage(int pageIndex, int itemIndex);
 	
 		/**
 		 * Moves an item in the page on the right of provided the page
@@ -86,7 +86,7 @@ Define an adapter conforming to interface PagedDragDropGridAdapter.java
 		 * @param pageIndex
 		 * @param itemIndex
 		 */
-		public void moveItemToPageOnRight(int pageIndex, int itemIndex);
+		public void moveItemToNextPage(int pageIndex, int itemIndex);
 	
 		
 		/**
