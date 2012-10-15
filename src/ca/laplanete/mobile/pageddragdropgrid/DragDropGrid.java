@@ -146,20 +146,17 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private void animateMoveAllItems() {
 		Animation rotateAnimation = createFastRotateAnimation();
 
-		for (int i=0; i < getChildCount(); i++) {
+		for (int i=0; i < getItemViewCount(); i++) {
 			View child = getChildAt(i);
-			if (!(child instanceof DeleteDropZoneView)) {
-				child.startAnimation(rotateAnimation);
-			}
+			child.startAnimation(rotateAnimation);
 		 }
 	}
 	
 	private void cancelAnimations() {
-		 for (int i=0; i < getChildCount(); i++) {
+		 for (int i=0; i < getItemViewCount(); i++) {
 			 View child = getChildAt(i);
-			 if (!(child instanceof DeleteDropZoneView)) {
-				 child.clearAnimation();
-			 }
+			 child.clearAnimation();
+
 		 }
 	}
 
@@ -633,7 +630,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 
 	private List<View> saveChildren() {
 		List<View> children = new ArrayList<View>();
-		for (int i = 0; i < getChildCount()-1; i++) {
+		for (int i = 0; i < getItemViewCount(); i++) {
 			View child = getChildAt(i);
 			child.clearAnimation();
 			children.add(child);
@@ -712,20 +709,22 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private void searchBiggestChildMeasures() {
 		biggestChildWidth = 0;
 		biggestChildHeight = 0;
-		for (int index = 1; index < getChildCount(); index++) {
+		for (int index = 0; index < getItemViewCount(); index++) {
 			View child = getChildAt(index);
-			
-			if (!(child instanceof DeleteDropZoneView)) {
 
-				if (biggestChildHeight < child.getMeasuredHeight()) {
-					biggestChildHeight = child.getMeasuredHeight();
-				}
-	
-				if (biggestChildWidth < child.getMeasuredWidth()) {
-					biggestChildWidth = child.getMeasuredWidth();
-				}
+			if (biggestChildHeight < child.getMeasuredHeight()) {
+				biggestChildHeight = child.getMeasuredHeight();
+			}
+
+			if (biggestChildWidth < child.getMeasuredWidth()) {
+				biggestChildWidth = child.getMeasuredWidth();
 			}
 		}
+	}
+
+	private int getItemViewCount() {
+		// -1 to remove the DeleteZone from the loop
+		return getChildCount()-1;
 	}
 
 	private void adaptChildrenMeasuresToViewSize(int widthSize, int heightSize) {
@@ -841,7 +840,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private int positionForView(View v) {
-		for (int index = 0; index < getChildCount(); index++) {
+		for (int index = 0; index < getItemViewCount(); index++) {
 			View child = getChildAt(index);
 				if (isPointInsideView(initialX, initialY, child)) {
 					return index;
