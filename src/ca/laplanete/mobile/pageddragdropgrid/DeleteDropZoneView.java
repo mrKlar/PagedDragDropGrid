@@ -50,7 +50,7 @@ public class DeleteDropZoneView extends View {
 			canvas.drawText(removeString, 10, getMeasuredHeight() - ((getMeasuredHeight() - bounds.height()) / 2) , mTextPaintStraight);
 		 } else {
 			mTextPaintRed.setTextSize(proportion);
-			canvas.drawText(removeString, 10, getMeasuredHeight() - ((getMeasuredHeight() - bounds.height()) / 2), mTextPaintRed);
+			canvas.drawText(removeString, 10, getMeasuredHeight() - ((getMeasuredHeight() - bounds.height()) / 2) , mTextPaintRed);
 		 }
 	}
 

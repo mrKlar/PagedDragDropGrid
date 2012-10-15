@@ -184,12 +184,8 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void touchUp() {
-		reorderChildren();
 		
-		manageDeleteZoneDrop(lastTouchX, lastTouchY);
-		
-		onLayout(true, getLeft(), getTop(), getRight(), getBottom());
-		
+		manageChildrenReordering();
 		hideDeleteView();
 		cancelEdgeTimer();
 		
@@ -198,6 +194,33 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		lastTarget = -1;
 		container.enableScroll();		
 		cancelAnimations();
+	}
+
+	private void manageChildrenReordering() {
+		boolean draggedDeleted = touchUpInDeleteZoneDrop(lastTouchX, lastTouchY);
+		
+		if (draggedDeleted) {
+			reorderChildrenWhenDraggedDeleted();
+		} else {
+			reorderChildren();
+		}
+	}
+
+	private void reorderChildrenWhenDraggedDeleted() {
+		Integer newDraggedPosition = newPositions.get(dragged,dragged);
+		
+		List<View> children = cleanUnorderedChildren();
+		addReorderedChildrenToParent(children);
+		
+		tellAdapterDraggedIsDeleted(newDraggedPosition);
+		removeViewAt(newDraggedPosition);
+		
+		onLayout(true, getLeft(), getTop(), getRight(), getBottom());
+	}
+
+	private void tellAdapterDraggedIsDeleted(Integer newDraggedPosition) {
+		ItemPosition position = getPageForItemAtAbsolutePosition(newDraggedPosition);
+		adapter.deleteItem(position.pageIndex,position.itemIndex);
 	}
 
 	private void touchDown(MotionEvent event) {
@@ -232,16 +255,16 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		}
 	}
 	
-	private void manageDeleteZoneDrop(int x, int y) {
+	private boolean touchUpInDeleteZoneDrop(int x, int y) {
 		Rect zone = new Rect();
 		deleteZone.getHitRect(zone);
 		
 		if (zone.intersect(x, y, x+1, y+1)) {
-			ItemPosition position = getPageForItemAtAbsolutePosition(dragged);
-			adapter.deleteItem(position.pageIndex,position.itemIndex);
-			removeViewAt(dragged);
+
 			deleteZone.smother();
+			return true;
 		} 
+		return false;
 	}
 
 	private void moveDraggedView(int x, int y) {
@@ -356,9 +379,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 
 	
 	private void moveDraggedToPageOnLeft() {
-		List<View> children = saveChildren();
-		
-		removeItemChildren(children);
+		List<View> children = cleanUnorderedChildren();
 
 		List<View> reorderedViews = reeorderView(children);
 		int draggedEndPosition = newPositions.get(dragged, dragged);
@@ -384,8 +405,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void moveDraggedToPageOnRight() {
-		List<View> children = saveChildren();
-		removeItemChildren(children);
+		List<View> children = cleanUnorderedChildren();
 
 		List<View> reorderedViews = reeorderView(children);
 		int draggedEndPosition = newPositions.get(dragged, dragged);
@@ -590,13 +610,18 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void reorderChildren() {
-		List<View> children = saveChildren();
-		removeItemChildren(children);
-		reAddChildrenInParent(children);
+		List<View> children = cleanUnorderedChildren();
+		addReorderedChildrenToParent(children);
 		onLayout(true, getLeft(), getTop(), getRight(), getBottom());
 	}
 
-	private void reAddChildrenInParent(List<View> children) {
+	private List<View> cleanUnorderedChildren() {
+		List<View> children = saveChildren();
+		removeItemChildren(children);
+		return children;
+	}
+
+	private void addReorderedChildrenToParent(List<View> children) {
 		List<View> reorderedViews = reeorderView(children);
 		newPositions.clear();
 
