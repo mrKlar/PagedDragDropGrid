@@ -43,6 +43,6 @@ public class ExampleActivity extends Activity {
 		PagedDragDropGrid gridview = (PagedDragDropGrid) findViewById(R.id.gridview);		
 		gridview.setAdapter(new ExamplePagedDragDropGridAdapter(this));
 		
-		gridview.setBackgroundColor(Color.GRAY);
+		gridview.setBackgroundColor(Color.LTGRAY);
 	}
 }

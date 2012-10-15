@@ -33,6 +33,7 @@ import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -139,7 +140,8 @@ public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter
 		layout.addView(icon);
 		
 		TextView label = new TextView(context);
-		label.setText(item.getName());		
+		label.setText(item.getName());	
+		label.setTextColor(Color.BLACK);
 		label.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
 	
 		label.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
