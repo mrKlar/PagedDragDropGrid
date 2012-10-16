@@ -40,7 +40,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Display;
@@ -149,9 +148,6 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 
 		for (int i=0; i < getItemViewCount(); i++) {
 			View child = getChildAt(i);
-			if (i == dragged) {
-				Log.d("","animate dragged with rotation");
-			}
 			child.startAnimation(rotateAnimation);
 		 }
 	}
@@ -333,27 +329,31 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 			animateOnTheEdge();
 			if (edgeScrollTimer == null) {
 				edgeScrollTimer = new Timer();
-				edgeScrollTimer.schedule(new TimerTask() {          
-				    @Override
-				    public void run() {
-				    	if (wasOnEdgeJustNow) {
-				    		wasOnEdgeJustNow = false;
-				    		edgeTimerHandler.post(new Runnable() {	
-								@Override
-								public void run() {
-									hideDeleteView();
-									scroll(onRightEdge, onLeftEdge);
-									cancelAnimations();
-									animateMoveAllItems();
-									animateDragged();
-									popDeleteView();
-								}
-							});
-				    	} 
-				    }
-				}, 1000);
+				scheduleScroll(onRightEdge, onLeftEdge);
 			}
 		}
+	}
+
+	private void scheduleScroll(final boolean onRightEdge, final boolean onLeftEdge) {
+		edgeScrollTimer.schedule(new TimerTask() {          
+		    @Override
+		    public void run() {
+		    	if (wasOnEdgeJustNow) {
+		    		wasOnEdgeJustNow = false;
+		    		edgeTimerHandler.post(new Runnable() {	
+						@Override
+						public void run() {
+							hideDeleteView();
+							scroll(onRightEdge, onLeftEdge);
+							cancelAnimations();
+							animateMoveAllItems();
+							animateDragged();
+							popDeleteView();
+						}
+					});
+		    	} 
+		    }
+		}, 1000);
 	}
 
 	private boolean canScrollToEitherSide(final boolean onRightEdge, final boolean onLeftEdge) {
@@ -536,7 +536,6 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		set.addAnimation(rotate);
 		set.addAnimation(translate);
 		
-		Log.d("","Clear animateMoveToNewPosition"); 
 		targetView.clearAnimation();
 		targetView.startAnimation(set);
 	}
