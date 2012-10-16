@@ -201,10 +201,21 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		boolean draggedDeleted = touchUpInDeleteZoneDrop(lastTouchX, lastTouchY);
 		
 		if (draggedDeleted) {
+			animateDeleteDragged();
 			reorderChildrenWhenDraggedIsDeleted();
 		} else {
 			reorderChildren();
 		}
+	}
+
+	private void animateDeleteDragged() {
+		ScaleAnimation scale = new ScaleAnimation(1.4f, 0f, 1.4f, 0f, biggestChildWidth / 2 , biggestChildHeight / 2);
+		scale.setDuration(200);
+		scale.setFillAfter(true);
+		scale.setFillEnabled(true);
+
+		getChildAt(dragged).clearAnimation();
+		getChildAt(dragged).startAnimation(scale);
 	}
 
 	private void reorderChildrenWhenDraggedIsDeleted() {
@@ -215,8 +226,8 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		
 		tellAdapterDraggedIsDeleted(newDraggedPosition);
 		removeViewAt(newDraggedPosition);
-		
-		onLayout(true, getLeft(), getTop(), getRight(), getBottom());
+
+		requestLayout();
 	}
 
 	private void tellAdapterDraggedIsDeleted(Integer newDraggedPosition) {
@@ -353,30 +364,37 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		cancelEdgeTimer();
 		
 		if (onLeftEdge && container.canScrollToPreviousPage()) {
-			tellAdapterToMoveItemToPreviousPage(dragged);	
-			moveDraggedToPreviousPage();
-									
-			container.scrollLeft();
-			int currentPage = currentPage();
-			int lastItem = adapter.itemCountInPage(currentPage)-1;
-			dragged = positionOfItem(currentPage, lastItem);
-
-			onLayout(true, getLeft(), getTop(), getRight(), getBottom());
-			stopAnimateOnTheEdge();
-
+			scrollToPreviousPage();
 		} else if (onRightEdge && container.canScrollToNextPage()) {
-			tellAdapterToMoveItemToNextPage(dragged);
-			moveDraggedToNextPage();
-			
-			container.scrollRight();
-			int currentPage = currentPage();
-			int lastItem = adapter.itemCountInPage(currentPage)-1;
-			dragged = positionOfItem(currentPage, lastItem);
-
-			onLayout(true, getLeft(), getTop(), getRight(), getBottom());
-			stopAnimateOnTheEdge();
+			scrollToNextPage();
 		}
 		wasOnEdgeJustNow = false;	
+	}
+
+	private void scrollToNextPage() {
+		tellAdapterToMoveItemToNextPage(dragged);
+		moveDraggedToNextPage();
+		
+		container.scrollRight();
+		int currentPage = currentPage();
+		int lastItem = adapter.itemCountInPage(currentPage)-1;
+		dragged = positionOfItem(currentPage, lastItem);
+
+		requestLayout();
+		stopAnimateOnTheEdge();
+	}
+
+	private void scrollToPreviousPage() {
+		tellAdapterToMoveItemToPreviousPage(dragged);	
+		moveDraggedToPreviousPage();
+								
+		container.scrollLeft();
+		int currentPage = currentPage();
+		int lastItem = adapter.itemCountInPage(currentPage)-1;
+		dragged = positionOfItem(currentPage, lastItem);
+
+		requestLayout();
+		stopAnimateOnTheEdge();
 	}
 	
 	private void moveDraggedToPreviousPage() {
@@ -615,7 +633,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private void reorderChildren() {
 		List<View> children = cleanUnorderedChildren();
 		addReorderedChildrenToParent(children);
-		onLayout(true, getLeft(), getTop(), getRight(), getBottom());
+		requestLayout();
 	}
 
 	private List<View> cleanUnorderedChildren() {
@@ -839,8 +857,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private void animateDragged() {
 		
 		ScaleAnimation scale = new ScaleAnimation(1f, 1.4f, 1f, 1.4f, biggestChildWidth / 2 , biggestChildHeight / 2);
-		scale.setDuration(100);
-		scale.setRepeatCount(0);
+		scale.setDuration(200);
 		scale.setFillAfter(true);
 		scale.setFillEnabled(true);
 
