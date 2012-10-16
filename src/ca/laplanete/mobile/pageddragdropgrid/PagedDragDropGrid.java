@@ -88,8 +88,7 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
     public void initPagedScroll(){
     	
     	setScrollBarStyle(SCROLLBARS_INSIDE_OVERLAY);
-    	
-    	
+
         setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

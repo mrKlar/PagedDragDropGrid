@@ -39,7 +39,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.View;
 import ca.laplanete.mobile.example.R;
 
@@ -86,10 +85,12 @@ public class DeleteDropZoneView extends View {
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
-	
 		super.onDraw(canvas);
 		
-//		Log.d("onDraw", Integer.toString(getMeasuredWidth()) + "," + Integer.toString(getMeasuredHeight()));
+		int measuredWidth = getMeasuredWidth();
+		int measuredHeight = getMeasuredHeight();
+		
+//		Log.d("onDraw", Integer.toString(measuredWidth) + "," + Integer.toString(measuredHeight));
 		
 		String removeString = getResources().getString(R.string.removeItem);
 		
@@ -98,17 +99,17 @@ public class DeleteDropZoneView extends View {
 		Rect bounds = new Rect();
 		mTextPaintStraight.getTextBounds("X",0,1,bounds);
 		
-		int proportion = 3 * getMeasuredHeight() / 4;
+		int proportion = 3 * measuredHeight / 4;
 		if (straight) {	
 			canvas.drawBitmap(trash, 0, 0, bitmapPaint);
 			
 			mTextPaintStraight.setTextSize(proportion);
-			canvas.drawText(removeString, getMeasuredHeight() + 5, getMeasuredHeight() - ((getMeasuredHeight() - bounds.height()) / 2) , mTextPaintStraight);
+			canvas.drawText(removeString, measuredHeight + 5, measuredHeight - ((measuredHeight - bounds.height()) / 2) , mTextPaintStraight);
 		 } else {
 			 canvas.drawBitmap(trash, 0, 0, bitmapPaintRed);
 			 
 			mTextPaintRed.setTextSize(proportion);
-			canvas.drawText(removeString, getMeasuredHeight() + 5, getMeasuredHeight() - ((getMeasuredHeight() - bounds.height()) / 2) , mTextPaintRed);
+			canvas.drawText(removeString, measuredHeight + 5, measuredHeight - ((measuredHeight - bounds.height()) / 2) , mTextPaintRed);
 		 }
 	}
 

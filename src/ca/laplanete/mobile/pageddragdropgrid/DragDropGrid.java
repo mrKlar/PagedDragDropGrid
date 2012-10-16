@@ -35,12 +35,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -48,13 +50,12 @@ import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongClickListener {
 
@@ -78,7 +79,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private int initialY;
 	private boolean movingView;
 	private int lastTarget = -1;
-	private boolean isOnEdge = false;
+	private boolean wasOnEdgeJustNow = false;
 	private Timer edgeScrollTimer;
 	
 	final private Handler edgeTimerHandler = new Handler();
@@ -148,15 +149,19 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 
 		for (int i=0; i < getItemViewCount(); i++) {
 			View child = getChildAt(i);
+			if (i == dragged) {
+				Log.d("","animate dragged with rotation");
+			}
 			child.startAnimation(rotateAnimation);
 		 }
 	}
 	
 	private void cancelAnimations() {
 		 for (int i=0; i < getItemViewCount(); i++) {
-			 View child = getChildAt(i);
-			 child.clearAnimation();
-
+			 if (i != dragged) {
+				 View child = getChildAt(i);
+				 child.clearAnimation();
+			 }
 		 }
 	}
 
@@ -232,7 +237,6 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 			lastTouchX = (int) event.getX();
 			lastTouchY = (int) event.getY();
 			
-		
 			moveDraggedView(lastTouchX, lastTouchY);
 			manageSwapPosition(lastTouchX, lastTouchY);
 			manageEdgeCoordinates(lastTouchX);
@@ -285,22 +289,24 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		final boolean onRightEdge = onRightEdgeOfScreen(x);
 		final boolean onLeftEdge = onLeftEdgeOfScreen(x);
 		
-		if (onRightEdge || onLeftEdge) {			
-			if (!isOnEdge) {
-				
+		if (canScrollToEitherSide(onRightEdge,onLeftEdge)) {			
+			if (!wasOnEdgeJustNow) {
 				startEdgeDelayTimer(onRightEdge, onLeftEdge);	
-				isOnEdge = true;											
+				wasOnEdgeJustNow = true;											
 			}
 		} else {
-			stopAnimateOnTheEdge();
-			isOnEdge = false;
+			if (wasOnEdgeJustNow) {
+				stopAnimateOnTheEdge();
+			}
+			wasOnEdgeJustNow = false;
 			cancelEdgeTimer();
 		}
 	}
 
 	private void stopAnimateOnTheEdge() {
-		View draggedView = getChildAt(dragged);
-		draggedView.clearAnimation();
+			View draggedView = getChildAt(dragged);
+			draggedView.clearAnimation();
+			animateDragged();
 	}
 
 	private void cancelEdgeTimer() {
@@ -312,15 +318,15 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void startEdgeDelayTimer(final boolean onRightEdge, final boolean onLeftEdge) {
-		if (canScrollEitherSide(onRightEdge, onLeftEdge)) {
+		if (canScrollToEitherSide(onRightEdge, onLeftEdge)) {
 			animateOnTheEdge();
 			if (edgeScrollTimer == null) {
 				edgeScrollTimer = new Timer();
 				edgeScrollTimer.schedule(new TimerTask() {          
 				    @Override
 				    public void run() {
-				    	if (isOnEdge) {
-				    		isOnEdge = false;
+				    	if (wasOnEdgeJustNow) {
+				    		wasOnEdgeJustNow = false;
 				    		edgeTimerHandler.post(new Runnable() {	
 								@Override
 								public void run() {
@@ -328,6 +334,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 									scroll(onRightEdge, onLeftEdge);
 									cancelAnimations();
 									animateMoveAllItems();
+									animateDragged();
 									popDeleteView();
 								}
 							});
@@ -338,7 +345,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		}
 	}
 
-	private boolean canScrollEitherSide(final boolean onRightEdge, final boolean onLeftEdge) {
+	private boolean canScrollToEitherSide(final boolean onRightEdge, final boolean onLeftEdge) {
 		return (onLeftEdge && container.canScrollToPreviousPage()) || (onRightEdge && container.canScrollToNextPage());
 	}
 
@@ -369,9 +376,8 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 			onLayout(true, getLeft(), getTop(), getRight(), getBottom());
 			stopAnimateOnTheEdge();
 		}
-		isOnEdge = false;	
+		wasOnEdgeJustNow = false;	
 	}
-
 	
 	private void moveDraggedToPreviousPage() {
 		List<View> children = cleanUnorderedChildren();
@@ -389,7 +395,6 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		}
 
 		int indexOfDraggedOnNewPage = indexFirstElementInCurrentPage-1;
-
 		reorderAndAddViews(reorderedViews, draggedView, indexOfDraggedOnNewPage);
 	}
 
@@ -419,16 +424,14 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 	
 	private void reorderAndAddViews(List<View> reorderedViews, View draggedView, int indexOfDraggedOnNewPage) {
-		
-		Log.d("indexOfDraggedOnNewPage", Integer.toString(indexOfDraggedOnNewPage));
+
 		reorderedViews.add(indexOfDraggedOnNewPage,draggedView);
-		
 		newPositions.clear();
 		
 		for (View view : reorderedViews) {
-			Log.d("view text", ((TextView)((LinearLayout)view).getChildAt(1)).getText().toString());
-			if (view != null)
+			if (view != null) {
 				addView(view);
+			}
 		}
 		
 		deleteZone.bringToFront();
@@ -447,19 +450,16 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		
 		int rightEdgeXCoor = (currentPage*gridPageWidth) + gridPageWidth;
 		int distanceFromEdge = rightEdgeXCoor - x;
-		return (x > (rightEdgeXCoor - EGDE_DETECTION_MARGIN) && distanceFromEdge < EGDE_DETECTION_MARGIN);
+		return (x > (rightEdgeXCoor - EGDE_DETECTION_MARGIN)) && (distanceFromEdge < EGDE_DETECTION_MARGIN);
 	}
 
 	private void animateOnTheEdge() {
 		View v = getChildAt(dragged);
 
-		AnimationSet animSet = new AnimationSet(true);
 		ScaleAnimation scale = new ScaleAnimation(.667f, 1.5f, .667f, 1.5f, v.getMeasuredWidth() * 3 / 4, v.getMeasuredHeight() * 3 / 4);
 		scale.setDuration(200);
 		scale.setRepeatMode(Animation.REVERSE);
-		scale.setRepeatCount(Integer.MAX_VALUE);
-		
-		animSet.addAnimation(scale);
+		scale.setRepeatCount(Animation.INFINITE);
 
 		v.clearAnimation();
 		v.startAnimation(scale);
@@ -467,6 +467,10 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 
 	private void animateGap(int targetLocationInGrid) {
 		int viewAtPosition = currentViewAtPosition(targetLocationInGrid);
+		
+		if (viewAtPosition == dragged) {
+			return;
+		}
 		
 		View targetView = getChildAt(viewAtPosition);
 
@@ -498,7 +502,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private void saveNewPositions(int targetLocation, int viewAtPosition) {
 		newPositions.put(viewAtPosition, newPositions.get(dragged, dragged));
 		newPositions.put(dragged, targetLocation);
-		swapDraggedWith(newPositions.get(dragged), newPositions.get(viewAtPosition));
+		tellAdapterToSwapDraggedWithTarget(newPositions.get(dragged, dragged), newPositions.get(viewAtPosition, viewAtPosition));
 	}
 
 	private boolean viewWasAlreadyMoved(int targetLocation, int viewAtPosition) {
@@ -510,9 +514,11 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		
 		Animation rotate = createFastRotateAnimation();        
 		Animation translate = createTranslateAnimation(oldOffset, newOffset);
-		
+
 		set.addAnimation(rotate);
 		set.addAnimation(translate);
+		
+		Log.d("","Clear animateMoveToNewPosition"); 
 		targetView.clearAnimation();
 		targetView.startAnimation(set);
 	}
@@ -525,21 +531,23 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		translate.setDuration(ANIMATION_DURATION);
 		translate.setFillEnabled(true);
 		translate.setFillAfter(true);
+		translate.setInterpolator(new AccelerateDecelerateInterpolator());
 		return translate;
 	}
 
 	private Animation createFastRotateAnimation() {
-		Animation a = new RotateAnimation(-2.0f, 
+		Animation rotate = new RotateAnimation(-2.0f, 
 										  2.0f,
 										  Animation.RELATIVE_TO_SELF, 
 										  0.5f, 
 										  Animation.RELATIVE_TO_SELF,
 										  0.5f);		
-	 	a.setRepeatMode(Animation.REVERSE);
-        a.setRepeatCount(Integer.MAX_VALUE);
-        a.setDuration(60);
+	 	rotate.setRepeatMode(Animation.REVERSE);
+        rotate.setRepeatCount(Animation.INFINITE);
+        rotate.setDuration(60);
+        rotate.setInterpolator(new AccelerateDecelerateInterpolator());
         
-		return a;
+		return rotate;
 	}
 
 	private int currentViewAtPosition(int targetLocation) {
@@ -675,9 +683,15 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		computeGridMatrixSize(widthSize, heightSize);
 		computeColumnsAndRowsSizes(widthSize, heightSize);
 
-		measureChild(deleteZone, MeasureSpec.makeMeasureSpec(gridPageWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec((int)(gridPageHeight * 0.04f), MeasureSpec.EXACTLY));
+		measureChild(deleteZone, MeasureSpec.makeMeasureSpec(gridPageWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec((int)getPixelFromDip(20), MeasureSpec.EXACTLY));
 		
 		setMeasuredDimension(widthSize * adapter.pageCount(), heightSize);
+	}
+
+	private float getPixelFromDip(int size) {
+		Resources r = getResources();
+		float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, size, r.getDisplayMetrics());
+		return px;
 	}
 
 	private void computeColumnsAndRowsSizes(int widthSize, int heightSize) {
@@ -815,9 +829,23 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		dragged = positionForView(v);
 		
 		animateMoveAllItems();
+		
+		animateDragged();
 		popDeleteView();
 	
 		return true;
+	}
+
+	private void animateDragged() {
+		
+		ScaleAnimation scale = new ScaleAnimation(1f, 1.4f, 1f, 1.4f, biggestChildWidth / 2 , biggestChildHeight / 2);
+		scale.setDuration(100);
+		scale.setRepeatCount(0);
+		scale.setFillAfter(true);
+		scale.setFillEnabled(true);
+
+		getChildAt(dragged).clearAnimation();
+		getChildAt(dragged).startAnimation(scale);
 	}
 
 	private void popDeleteView() {
@@ -897,7 +925,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		return null;
 	}
 
-	private void swapDraggedWith(int dragged, int target) {
+	private void tellAdapterToSwapDraggedWithTarget(int dragged, int target) {
 		ItemPosition draggedItemPositionInPage = itemInformationAtPosition(dragged);
 		ItemPosition targetItemPositionInPage = itemInformationAtPosition(target);
 		if (draggedItemPositionInPage != null && targetItemPositionInPage != null) {
