@@ -558,7 +558,8 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 										  Animation.RELATIVE_TO_SELF, 
 										  0.5f, 
 										  Animation.RELATIVE_TO_SELF,
-										  0.5f);		
+										  0.5f);	
+		
 	 	rotate.setRepeatMode(Animation.REVERSE);
         rotate.setRepeatCount(Animation.INFINITE);
         rotate.setDuration(60);
@@ -758,7 +759,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void adaptChildrenMeasuresToViewSize(int widthSize, int heightSize) {
-		if (adapter.columnCount() != -1 && adapter.rowCount() != -1) {
+		if (adapter.columnCount() != PagedDragDropGridAdapter.AUTOMATIC && adapter.rowCount() != PagedDragDropGridAdapter.AUTOMATIC) {
 			int desiredGridItemWidth = widthSize / adapter.columnCount();
 			int desiredGridItemHeight = heightSize / adapter.rowCount();			
 			measureChildren(MeasureSpec.makeMeasureSpec(desiredGridItemWidth, MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(desiredGridItemHeight, MeasureSpec.AT_MOST));
@@ -784,8 +785,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	@Override
-	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		
+	protected void onLayout(boolean changed, int l, int t, int r, int b) {		
 		int pageWidth  = (l + r) / adapter.pageCount();		
 
 		for (int page = 0; page < adapter.pageCount(); page++) {
@@ -807,13 +807,13 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void layoutAChild(int pageWidth, int page, int col, int row, int childIndex) {
-		int absoluteIndex = positionOfItem(page, childIndex);
+		int position = positionOfItem(page, childIndex);
 
-		View child = getChildAt(absoluteIndex);
+		View child = getChildAt(position);
 		
 		int left = 0;
 		int top = 0;
-		if (absoluteIndex == dragged && lastTouchOnEdge()) {
+		if (position == dragged && lastTouchOnEdge()) {
 			left = computePageEdgeXCoor(child); 
 			top = lastTouchY - (child.getMeasuredHeight() / 2);
 		} else {
