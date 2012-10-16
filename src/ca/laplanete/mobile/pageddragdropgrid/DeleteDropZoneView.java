@@ -44,8 +44,8 @@ import ca.laplanete.mobile.example.R;
 
 public class DeleteDropZoneView extends View {
 
-	private Paint mTextPaintStraight;
-	private Paint mTextPaintRed;
+	private Paint textPaintStraight;
+	private Paint textPaintRed;
 	private Paint bitmapPaint;
 	private Paint bitmapPaintRed;
 	private boolean straight = true;
@@ -56,31 +56,37 @@ public class DeleteDropZoneView extends View {
 	public DeleteDropZoneView(Context context) {
 		super(context);
 
-		mTextPaintStraight = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mTextPaintStraight.setColor(Color.WHITE);
-		mTextPaintStraight.setStyle(Style.FILL); 		
-		mTextPaintStraight.setTypeface(Typeface.DEFAULT_BOLD);
+		textPaintStraight = createTextPaint();
+		textPaintStraight.setColor(Color.WHITE);
 		
-		mTextPaintRed = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mTextPaintRed.setColor(Color.RED);
-		mTextPaintRed.setStyle(Style.FILL); 	    
-		mTextPaintRed.setTypeface(Typeface.DEFAULT_BOLD);
+		textPaintRed = createTextPaint();
+		textPaintRed.setColor(Color.RED);
 		
-		bitmapPaint = new Paint();
-		bitmapPaint.setAntiAlias(true);
-		bitmapPaint.setFilterBitmap(true);
-		bitmapPaint.setDither(true);
+		bitmapPaint = createBaseBitmapPaint();
 		
-		bitmapPaintRed = new Paint();
-		bitmapPaintRed.setAntiAlias(true);
-		bitmapPaintRed.setFilterBitmap(true);
-		bitmapPaintRed.setDither(true);
+		bitmapPaintRed = createBaseBitmapPaint();
 		ColorFilter filter = new LightingColorFilter(Color.RED, 1);
 		bitmapPaintRed.setColorFilter(filter);
 		
 		setBackgroundColor(Color.BLACK);
-		getBackground().setAlpha(180); 
+		getBackground().setAlpha(200); 
 
+	}
+
+	private Paint createTextPaint() {
+		Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		textPaint.setStyle(Style.FILL); 		
+		textPaint.setTypeface(Typeface.DEFAULT_BOLD);
+		return textPaint;
+	}
+
+	private Paint createBaseBitmapPaint() {
+		Paint bitmapPaint = new Paint();
+		bitmapPaint.setAntiAlias(true);
+		bitmapPaint.setFilterBitmap(true);
+		bitmapPaint.setDither(true);
+		
+		return bitmapPaint;
 	}
 	
 	@Override
@@ -97,19 +103,19 @@ public class DeleteDropZoneView extends View {
 		initTrashIcon();
 		 
 		Rect bounds = new Rect();
-		mTextPaintStraight.getTextBounds("X",0,1,bounds);
+		textPaintStraight.getTextBounds("X",0,1,bounds);
 		
 		int proportion = 3 * measuredHeight / 4;
 		if (straight) {	
 			canvas.drawBitmap(trash, 0, 0, bitmapPaint);
 			
-			mTextPaintStraight.setTextSize(proportion);
-			canvas.drawText(removeString, measuredHeight + 5, measuredHeight - ((measuredHeight - bounds.height()) / 2) , mTextPaintStraight);
+			textPaintStraight.setTextSize(proportion);
+			canvas.drawText(removeString, measuredHeight + 5, measuredHeight - ((measuredHeight - bounds.height()) / 2) , textPaintStraight);
 		 } else {
 			 canvas.drawBitmap(trash, 0, 0, bitmapPaintRed);
 			 
-			mTextPaintRed.setTextSize(proportion);
-			canvas.drawText(removeString, measuredHeight + 5, measuredHeight - ((measuredHeight - bounds.height()) / 2) , mTextPaintRed);
+			textPaintRed.setTextSize(proportion);
+			canvas.drawText(removeString, measuredHeight + 5, measuredHeight - ((measuredHeight - bounds.height()) / 2) , textPaintRed);
 		 }
 	}
 
@@ -118,25 +124,6 @@ public class DeleteDropZoneView extends View {
 			trash = getImage(R.drawable.content_discard, getMeasuredHeight(), getMeasuredHeight());
 		}
 	}
-	
-	
-//	@Override
-//	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//		width = MeasureSpec.getSize(widthMeasureSpec);
-//		height = MeasureSpec.getSize(heightMeasureSpec);
-//		
-//		Log.d("onMeasure", Integer.toString(width) + "," + Integer.toString(height));
-//		
-//		setMeasuredDimension(width, height);
-//	}
-	
-//	@Override
-//	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-//		width = w;
-//		height = h;
-//		Log.d("onSizeChanged new", Integer.toString(w) + "," + Integer.toString(h));
-//		Log.d("onSizeChanged old", Integer.toString(oldw) + "," + Integer.toString(oldh));
-//	}
 
 	public void highlight() {
 		straight = false;

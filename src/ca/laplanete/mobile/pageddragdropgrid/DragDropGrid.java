@@ -179,7 +179,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 			touchUp();
 			break;
 		}
-		if (dragged != -1)
+		if (aViewIsDragged())
 			return true;
 		return false;
 	}
@@ -244,7 +244,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void touchMove(MotionEvent event) {
-		if (movingView && dragged != -1) {
+		if (movingView && aViewIsDragged()) {
 			lastTouchX = (int) event.getX();
 			lastTouchY = (int) event.getY();
 			
@@ -861,8 +861,14 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		scale.setFillAfter(true);
 		scale.setFillEnabled(true);
 
-		getChildAt(dragged).clearAnimation();
-		getChildAt(dragged).startAnimation(scale);
+		if (aViewIsDragged()) {
+			getChildAt(dragged).clearAnimation();
+			getChildAt(dragged).startAnimation(scale);
+		}
+	}
+
+	private boolean aViewIsDragged() {
+		return dragged != -1;
 	}
 
 	private void popDeleteView() {
