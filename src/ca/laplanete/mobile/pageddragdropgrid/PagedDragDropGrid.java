@@ -4,7 +4,7 @@
  * Nicolas Desjardins  
  * https://github.com/laplanete79
  * 
- * FacilitŽ solutions
+ * Facilitï¿½ solutions
  * http://www.facilitesolutions.com/
  * 
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -105,7 +105,7 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
         });
     }
     
-    public void setAdapter(ExamplePagedDragDropGridAdapter adapter) {
+    public void setAdapter(PagedDragDropGridAdapter adapter) {
     	this.adapter = adapter;
 		grid.setAdapter(adapter);
 		grid.setContainer(this);
