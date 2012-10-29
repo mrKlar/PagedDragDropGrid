@@ -33,7 +33,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.HorizontalScrollView;
-import ca.laplanete.mobile.example.ExamplePagedDragDropGridAdapter;
 
 public class PagedDragDropGrid extends HorizontalScrollView implements PagedContainer {
 

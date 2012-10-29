@@ -4,7 +4,7 @@
  * Nicolas Desjardins  
  * https://github.com/laplanete79
  * 
- * FacilitŽ solutions
+ * Facilitï¿½ solutions
  * http://www.facilitesolutions.com/
  * 
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -40,7 +40,6 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.view.View;
-import ca.laplanete.mobile.example.R;
 
 public class DeleteDropZoneView extends View {
 

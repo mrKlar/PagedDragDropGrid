@@ -4,7 +4,7 @@
  * Nicolas Desjardins  
  * https://github.com/laplanete79
  * 
- * FacilitŽ solutions
+ * Facilitï¿½ solutions
  * http://www.facilitesolutions.com/
  * 
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -31,6 +31,7 @@ package ca.laplanete.mobile.example;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+
 import ca.laplanete.mobile.pageddragdropgrid.PagedDragDropGrid;
 
 public class ExampleActivity extends Activity {

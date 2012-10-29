@@ -4,7 +4,7 @@
  * Nicolas Desjardins  
  * https://github.com/laplanete79
  * 
- * FacilitŽ solutions
+ * Facilitï¿½ solutions
  * http://www.facilitesolutions.com/
  * 
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -41,6 +41,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import ca.laplanete.mobile.pageddragdropgrid.PagedDragDropGridAdapter;
 
 public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter {
