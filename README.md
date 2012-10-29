@@ -112,6 +112,9 @@ ExampleActivity.java
 	setContentView(R.layout.example);
 	PagedDragDropGrid gridview = (PagedDragDropGrid) findViewById(R.id.gridview);		
 	gridview.setAdapter(new ExamplePagedDragDropGridAdapter(this));
+	
+	/* Optionally set an onClickListener */
+	gridview.setClickListener(this);
 
 Inspired by
 -----------

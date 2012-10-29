@@ -31,10 +31,13 @@ package ca.laplanete.mobile.example;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Toast;
 
 import ca.laplanete.mobile.pageddragdropgrid.PagedDragDropGrid;
 
-public class ExampleActivity extends Activity {
+public class ExampleActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,13 @@ public class ExampleActivity extends Activity {
 		setContentView(R.layout.example);
 		PagedDragDropGrid gridview = (PagedDragDropGrid) findViewById(R.id.gridview);		
 		gridview.setAdapter(new ExamplePagedDragDropGridAdapter(this));
+		gridview.setClickListener(this);
 		
 		gridview.setBackgroundColor(Color.LTGRAY);
 	}
+
+    @Override
+    public void onClick(View v) {
+        Toast.makeText(this, "Clicked View", Toast.LENGTH_SHORT).show();
+    }
 }

@@ -4,7 +4,7 @@
  * Nicolas Desjardins  
  * https://github.com/laplanete79
  * 
- * FacilitŽ solutions
+ * Facilitï¿½ solutions
  * http://www.facilitesolutions.com/
  * 
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -28,12 +28,6 @@
  */
 package ca.laplanete.mobile.pageddragdropgrid;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
@@ -56,12 +50,19 @@ import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongClickListener {
 
 	private static int ANIMATION_DURATION = 250;
 	private static int EGDE_DETECTION_MARGIN = 35;
 
 	private PagedDragDropGridAdapter adapter;
+	private OnClickListener onClickListener = null;
 	private PagedContainer container;
 	
 	private SparseArray<Integer> newPositions = new SparseArray<Integer>();
@@ -133,6 +134,10 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		this.adapter = adapter;
 		addChildViews();
 	}
+	
+	public void setOnClickListener(OnClickListener l) {
+	    onClickListener = l;
+	}
 
 	private void addChildViews() {
 		for (int page = 0; page < adapter.pageCount(); page++) {
@@ -172,7 +177,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 			touchMove(event);
 			break;
 		case MotionEvent.ACTION_UP:
-			touchUp();
+			touchUp(event);
 			break;
 		}
 		if (aViewIsDragged())
@@ -180,17 +185,21 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		return false;
 	}
 
-	private void touchUp() {
-		
-		manageChildrenReordering();
-		hideDeleteView();
-		cancelEdgeTimer();
-		
-		movingView = false;
-		dragged = -1;
-		lastTarget = -1;
-		container.enableScroll();		
-		cancelAnimations();
+	private void touchUp(MotionEvent event) {
+	    if(dragged == -1) {
+	        if(onClickListener != null)
+	            onClickListener.onClick((getChildAt(getTargetAtCoor((int) event.getX(), (int) event.getY()))));
+	    } else {
+    		manageChildrenReordering();
+    		hideDeleteView();
+    		cancelEdgeTimer();
+    		
+    		movingView = false;
+    		dragged = -1;
+    		lastTarget = -1;
+    		container.enableScroll();		
+    		cancelAnimations();
+	    }
 	}
 
 	private void manageChildrenReordering() {
@@ -974,5 +983,5 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 			this.pageIndex = pageIndex;
 			this.itemIndex = itemIndex;
 		}
-	}	
+	}
 }
