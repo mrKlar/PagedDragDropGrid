@@ -64,7 +64,7 @@ Define an adapter conforming to interface PagedDragDropGridAdapter.java
 		public void printLayout();
 	
 		/**
-		 * Swaps two items in he item list in a page
+		 * Swaps two items in the item list in a page
 		 * 
 		 * @param pageIndex
 		 * @param itemIndexA
@@ -129,7 +129,7 @@ License
  	  * Nicolas Desjardins  
  	  * https://github.com/laplanete79
  	  * 
- 	  * FacilitŽ solutions
+ 	  * Facilitï¿½ solutions
  	  * http://www.facilitesolutions.com/
  	  * 
  	  * Permission is hereby granted, free of charge, to any person obtaining
