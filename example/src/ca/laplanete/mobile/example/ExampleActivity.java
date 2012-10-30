@@ -4,7 +4,7 @@
  * Nicolas Desjardins  
  * https://github.com/mrKlar
  * 
- * Facilit� solutions
+ * Facilite solutions
  * http://www.facilitesolutions.com/
  * 
  * Permission is hereby granted, free of charge, to any person obtaining

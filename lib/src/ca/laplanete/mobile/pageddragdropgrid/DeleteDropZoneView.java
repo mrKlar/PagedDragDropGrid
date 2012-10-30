@@ -4,7 +4,7 @@
  * Nicolas Desjardins  
  * https://github.com/mrKlar
  * 
- * Facilit� solutions
+ * Facilite solutions
  * http://www.facilitesolutions.com/
  * 
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -94,12 +94,12 @@ public class DeleteDropZoneView extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		
-		int measuredHeight = getMeasuredHeight();				
+
+		int measuredHeight = getMeasuredHeight();
 		String removeString = getResources().getString(R.string.removeItem);
 		
 		initTrashIcon();
-		 
+		 		
 		textPaintStraight.getTextBounds("X",0,1,bounds);
 		
 		int proportion = 3 * measuredHeight / 4;
