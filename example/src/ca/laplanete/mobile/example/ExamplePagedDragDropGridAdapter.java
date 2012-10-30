@@ -145,7 +145,7 @@ public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter
 		label.setTextColor(Color.BLACK);
 		label.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
 	
-		label.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
+		label.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
 		
 		
 		layout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
