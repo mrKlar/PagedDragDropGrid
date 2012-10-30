@@ -2,7 +2,7 @@
  * Copyright 2012 
  * 
  * Nicolas Desjardins  
- * https://github.com/laplanete79
+ * https://github.com/mrKlar
  * 
  * Facilit� solutions
  * http://www.facilitesolutions.com/

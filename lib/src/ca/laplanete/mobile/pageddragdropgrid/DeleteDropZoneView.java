@@ -2,7 +2,7 @@
  * Copyright 2012 
  * 
  * Nicolas Desjardins  
- * https://github.com/laplanete79
+ * https://github.com/mrKlar
  * 
  * Facilit� solutions
  * http://www.facilitesolutions.com/
@@ -50,11 +50,14 @@ public class DeleteDropZoneView extends View {
 	private boolean straight = true;
 
 	private Bitmap trash;
+	private Rect bounds;
 
 
 	public DeleteDropZoneView(Context context) {
 		super(context);
 
+		bounds = new Rect();
+		
 		textPaintStraight = createTextPaint();
 		textPaintStraight.setColor(Color.WHITE);
 		
@@ -92,16 +95,11 @@ public class DeleteDropZoneView extends View {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		
-		int measuredWidth = getMeasuredWidth();
-		int measuredHeight = getMeasuredHeight();
-		
-//		Log.d("onDraw", Integer.toString(measuredWidth) + "," + Integer.toString(measuredHeight));
-		
+		int measuredHeight = getMeasuredHeight();				
 		String removeString = getResources().getString(R.string.removeItem);
 		
 		initTrashIcon();
 		 
-		Rect bounds = new Rect();
 		textPaintStraight.getTextBounds("X",0,1,bounds);
 		
 		int proportion = 3 * measuredHeight / 4;
