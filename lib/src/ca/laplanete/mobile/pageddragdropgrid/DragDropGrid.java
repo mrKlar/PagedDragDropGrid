@@ -187,8 +187,11 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 
 	private void touchUp(MotionEvent event) {
 	    if(dragged == -1) {
-	        if(onClickListener != null)
-	            onClickListener.onClick((getChildAt(getTargetAtCoor((int) event.getX(), (int) event.getY()))));
+	        if(onClickListener != null) {
+                View clickedView = getChildAt(getTargetAtCoor((int) event.getX(), (int) event.getY()));
+                if(clickedView != null)
+                    onClickListener.onClick(clickedView);
+            }
 	    } else {
     		manageChildrenReordering();
     		hideDeleteView();
