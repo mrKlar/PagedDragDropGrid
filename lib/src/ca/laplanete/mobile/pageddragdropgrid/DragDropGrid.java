@@ -713,8 +713,8 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		computeGridMatrixSize(widthSize, heightSize);
 		computeColumnsAndRowsSizes(widthSize, heightSize);
 
-		measureChild(deleteZone, MeasureSpec.makeMeasureSpec(gridPageWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec((int)getPixelFromDip(20), MeasureSpec.EXACTLY));
 		
+		measureChild(deleteZone, MeasureSpec.makeMeasureSpec(gridPageWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec((int)getPixelFromDip(40), MeasureSpec.EXACTLY));
 		setMeasuredDimension(widthSize * adapter.pageCount(), heightSize);
 	}
 
