@@ -1,12 +1,12 @@
 /**
- * Copyright 2012 
- * 
- * Nicolas Desjardins  
+ * Copyright 2012
+ *
+ * Nicolas Desjardins
  * https://github.com/mrKlar
- * 
+ *
  * Facilite solutions
  * http://www.facilitesolutions.com/
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -14,10 +14,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -57,27 +57,28 @@ public class DeleteDropZoneView extends View {
 		super(context);
 
 		bounds = new Rect();
-		
+
 		textPaintStraight = createTextPaint();
 		textPaintStraight.setColor(Color.WHITE);
-		
+
 		textPaintRed = createTextPaint();
 		textPaintRed.setColor(Color.RED);
-		
+
 		bitmapPaint = createBaseBitmapPaint();
-		
+
 		bitmapPaintRed = createBaseBitmapPaint();
 		ColorFilter filter = new LightingColorFilter(Color.RED, 1);
 		bitmapPaintRed.setColorFilter(filter);
-		
+
 		setBackgroundColor(Color.BLACK);
-		getBackground().setAlpha(200); 
+		getBackground().setAlpha(200);
 
 	}
 
 	private Paint createTextPaint() {
 		Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		textPaint.setStyle(Style.FILL); 		
+		textPaint.setStyle(Style.FILL);
+		textPaint.setTextAlign(Paint.Align.CENTER);
 		textPaint.setTypeface(Typeface.DEFAULT_BOLD);
 		return textPaint;
 	}
@@ -87,33 +88,31 @@ public class DeleteDropZoneView extends View {
 		bitmapPaint.setAntiAlias(true);
 		bitmapPaint.setFilterBitmap(true);
 		bitmapPaint.setDither(true);
-		
 		return bitmapPaint;
 	}
-	
+
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
 		int measuredHeight = getMeasuredHeight();
+		int measuredWidth = getMeasuredWidth();
 		String removeString = getResources().getString(R.string.removeItem);
-		
+
 		initTrashIcon();
-		 		
-		textPaintStraight.getTextBounds("X",0,1,bounds);
-		
+
+		textPaintStraight.getTextBounds(removeString, 0, 6, bounds);
+
 		int proportion = 3 * measuredHeight / 4;
-		if (straight) {	
-			canvas.drawBitmap(trash, 0, 0, bitmapPaint);
-			
+		if (straight) {
 			textPaintStraight.setTextSize(proportion);
-			canvas.drawText(removeString, measuredHeight + 5, measuredHeight - ((measuredHeight - bounds.height()) / 2) , textPaintStraight);
-		 } else {
-			 canvas.drawBitmap(trash, 0, 0, bitmapPaintRed);
-			 
+			canvas.drawText(removeString, (measuredWidth / 2) + (trash.getWidth() / 2) + 5, measuredHeight - ((measuredHeight - bounds.height()) / 2) , textPaintStraight);
+			canvas.drawBitmap(trash, (measuredWidth / 2) - (bounds.width() / 2) - (trash.getWidth() / 2) - 10, 0, bitmapPaint);
+		} else {
 			textPaintRed.setTextSize(proportion);
-			canvas.drawText(removeString, measuredHeight + 5, measuredHeight - ((measuredHeight - bounds.height()) / 2) , textPaintRed);
-		 }
+			canvas.drawText(removeString, (measuredWidth / 2) + (trash.getWidth() / 2) + 5, measuredHeight - ((measuredHeight - bounds.height()) / 2) , textPaintRed);
+			canvas.drawBitmap(trash, (measuredWidth / 2) - (bounds.width() / 2) - (trash.getWidth() / 2) - 10, 0, bitmapPaintRed);
+		}
 	}
 
 	private void initTrashIcon() {
