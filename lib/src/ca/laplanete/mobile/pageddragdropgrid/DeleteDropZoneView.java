@@ -135,6 +135,7 @@ public class DeleteDropZoneView extends View {
 	    Bitmap bmp = BitmapFactory.decodeResource( getResources(), id );
 	    Bitmap img = Bitmap.createScaledBitmap(bmp, width, height, true);
 	    bmp.recycle();
+	    invalidate();
 	    return img;
 	}
 
