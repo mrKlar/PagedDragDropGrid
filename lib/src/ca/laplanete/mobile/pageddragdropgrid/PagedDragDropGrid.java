@@ -114,6 +114,13 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
         grid.setOnClickListener(l);
     }
 
+    public void notifyDataSetChanged() {
+        removeAllViews();
+        initGrid();
+        grid.setAdapter(adapter);
+        grid.setContainer(this);
+    }
+
 	@Override
 	public void scrollToPage(int page) {
 		mActivePage = page;

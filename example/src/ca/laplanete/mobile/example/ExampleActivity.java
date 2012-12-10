@@ -31,6 +31,9 @@ package ca.laplanete.mobile.example;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -38,18 +41,35 @@ import android.widget.Toast;
 import ca.laplanete.mobile.pageddragdropgrid.PagedDragDropGrid;
 
 public class ExampleActivity extends Activity implements OnClickListener {
+    
+    private PagedDragDropGrid gridview;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.example);
-		PagedDragDropGrid gridview = (PagedDragDropGrid) findViewById(R.id.gridview);		
+		gridview = (PagedDragDropGrid) findViewById(R.id.gridview);		
 		gridview.setAdapter(new ExamplePagedDragDropGridAdapter(this));
 		gridview.setClickListener(this);
 		
 		gridview.setBackgroundColor(Color.LTGRAY);
 	}
+	
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add("Reset").setOnMenuItemClickListener(new OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                gridview.setAdapter(new ExamplePagedDragDropGridAdapter(ExampleActivity.this));
+                gridview.notifyDataSetChanged();
+                
+                return true;
+            }
+        });
+
+        return true;
+    }
 
     @Override
     public void onClick(View v) {
