@@ -39,7 +39,8 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
     private int mActivePage = 0;
 	private DragDropGrid grid;
 	private PagedDragDropGridAdapter adapter;
-    
+    private OnClickListener listener;
+
     public PagedDragDropGrid(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initPagedScroll();
@@ -111,7 +112,16 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 	}
     
     public void setClickListener(OnClickListener l) {
+        this.listener = l;
         grid.setOnClickListener(l);
+    }
+
+    public void notifyDataSetChanged() {
+        removeAllViews();
+        initGrid();
+        grid.setAdapter(adapter);
+        grid.setContainer(this);
+        grid.setOnClickListener(listener);
     }
 
 	@Override
