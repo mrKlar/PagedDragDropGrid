@@ -851,18 +851,22 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	@Override
-	public boolean onLongClick(View v) {
-		container.disableScroll();
-
-		movingView = true;
-		dragged = positionForView(v);
-
-		animateMoveAllItems();
-
-		animateDragged();
-		popDeleteView();
-
-		return true;
+	public boolean onLongClick(View v) {	    
+	    if(positionForView(v) != -1) {
+    		container.disableScroll();
+    
+    		movingView = true;
+    		dragged = positionForView(v);
+    
+    		animateMoveAllItems();
+    
+    		animateDragged();
+    		popDeleteView();
+    
+    		return true;
+	    }
+	    
+	    return false;
 	}
 
 	private void animateDragged() {
