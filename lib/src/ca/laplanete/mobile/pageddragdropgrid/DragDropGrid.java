@@ -186,7 +186,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void touchUp(MotionEvent event) {
-	    if(dragged == -1) {
+	    if(!aViewIsDragged()) {
 	        if(onClickListener != null) {
                 View clickedView = getChildAt(getTargetAtCoor((int) event.getX(), (int) event.getY()));
                 if(clickedView != null)
@@ -851,18 +851,22 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	@Override
-	public boolean onLongClick(View v) {
-		container.disableScroll();
-
-		movingView = true;
-		dragged = positionForView(v);
-
-		animateMoveAllItems();
-
-		animateDragged();
-		popDeleteView();
-
-		return true;
+	public boolean onLongClick(View v) {	    
+	    if(positionForView(v) != -1) {
+    		container.disableScroll();
+    
+    		movingView = true;
+    		dragged = positionForView(v);
+    
+    		animateMoveAllItems();
+    
+    		animateDragged();
+    		popDeleteView();
+    
+    		return true;
+	    }
+	    
+	    return false;
 	}
 
 	private void animateDragged() {
