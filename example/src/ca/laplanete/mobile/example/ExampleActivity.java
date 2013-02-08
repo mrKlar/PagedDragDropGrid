@@ -50,7 +50,7 @@ public class ExampleActivity extends Activity implements OnClickListener {
 		
 		setContentView(R.layout.example);
 		gridview = (PagedDragDropGrid) findViewById(R.id.gridview);		
-		gridview.setAdapter(new ExamplePagedDragDropGridAdapter(this));
+		gridview.setAdapter(new ExamplePagedDragDropGridAdapter(this, gridview));
 		gridview.setClickListener(this);
 		
 		gridview.setBackgroundColor(Color.LTGRAY);
@@ -61,7 +61,7 @@ public class ExampleActivity extends Activity implements OnClickListener {
         menu.add("Reset").setOnMenuItemClickListener(new OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                gridview.setAdapter(new ExamplePagedDragDropGridAdapter(ExampleActivity.this));
+                gridview.setAdapter(new ExamplePagedDragDropGridAdapter(ExampleActivity.this, gridview));
                 gridview.notifyDataSetChanged();
                 
                 return true;

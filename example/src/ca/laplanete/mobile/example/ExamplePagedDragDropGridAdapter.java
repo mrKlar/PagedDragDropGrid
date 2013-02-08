@@ -37,22 +37,26 @@ import android.graphics.Color;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import ca.laplanete.mobile.pageddragdropgrid.PagedDragDropGrid;
 import ca.laplanete.mobile.pageddragdropgrid.PagedDragDropGridAdapter;
 
 public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter {
 
 	private Context context;
+	private PagedDragDropGrid gridview;
 	
 	List<Page> pages = new ArrayList<Page>();
 	
-	public ExamplePagedDragDropGridAdapter(Context context) {
+	public ExamplePagedDragDropGridAdapter(Context context, PagedDragDropGrid gridview) {
 		super();
 		this.context = context;
+		this.gridview = gridview;
 		
 		Page page1 = new Page();
 		List<Item> items = new ArrayList<Item>();
@@ -146,10 +150,22 @@ public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter
 		label.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
 	
 		label.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
-		
-		
+
 		layout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-			
+		
+		// only set selector on every other page for demo purposes
+		// if you do not wish to use the selector functionality, simply disregard this code
+		if(page % 2 == 0) {
+    		layout.setBackground(context.getResources().getDrawable(R.drawable.list_selector_holo_light));
+    		layout.setClickable(true);
+    		layout.setOnLongClickListener(new OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return gridview.onLongClick(v);
+                }
+    		});
+		}
+
 		layout.addView(label);
 		return layout;
 	}
