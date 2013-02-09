@@ -166,6 +166,10 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		 }
 	}
 
+	public boolean onInterceptTouchEvent(MotionEvent event) {
+	    return onTouch(null, event);
+	}
+	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		int action = event.getAction();
