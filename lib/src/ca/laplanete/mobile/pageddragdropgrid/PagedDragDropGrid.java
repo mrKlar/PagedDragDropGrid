@@ -197,14 +197,13 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 
     @Override
     public boolean onFling(MotionEvent evt1, MotionEvent evt2, float velocityX, float velocityY) {   
-            Log.e("Page", "OnFling action" + evt2.getAction());
-            if (velocityX < -FLING_VELOCITY) {
-                scrollRight();
-                return true;
-            } else if (velocityX > FLING_VELOCITY) {
-                scrollLeft();
-                return true;
-            }
+        if (velocityX < -FLING_VELOCITY) {
+            scrollRight();
+            return true;
+        } else if (velocityX > FLING_VELOCITY) {
+            scrollLeft();
+            return true;
+        }
         return false;
     }
 
