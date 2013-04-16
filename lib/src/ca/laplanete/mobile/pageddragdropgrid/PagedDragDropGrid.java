@@ -30,16 +30,21 @@ package ca.laplanete.mobile.pageddragdropgrid;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 
-public class PagedDragDropGrid extends HorizontalScrollView implements PagedContainer {
+public class PagedDragDropGrid extends HorizontalScrollView implements PagedContainer, OnGestureListener {
 
+    private static final int FLING_VELOCITY = 500;
     private int mActivePage = 0;
 	private DragDropGrid grid;
 	private PagedDragDropGridAdapter adapter;
     private OnClickListener listener;
+    private GestureDetector gestureScanner;
 
     public PagedDragDropGrid(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -88,18 +93,21 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
     public void initPagedScroll(){
     	
     	setScrollBarStyle(SCROLLBARS_INSIDE_OVERLAY);
+    	
+    	gestureScanner = new GestureDetector(getContext(), this);
 
         setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL ){
+                boolean specialEventUsed = gestureScanner.onTouchEvent(event);
+                if(!specialEventUsed && (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL)) {
                     int scrollX = getScrollX();                    
                     int onePageWidth = v.getMeasuredWidth();
                     int page = ((scrollX + (onePageWidth/2))/onePageWidth);
                     scrollToPage(page);
                     return true;
-                } else{
-                    return false;
+                } else {                    
+                    return specialEventUsed;
                 }
             }
         });
@@ -177,5 +185,50 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 	public boolean canScrollToPreviousPage() {
 		int newPage = mActivePage-1;
 		return (newPage >= 0);
-	}	
+	}
+
+	
+	
+    @Override
+    public boolean onDown(MotionEvent arg0) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean onFling(MotionEvent evt1, MotionEvent evt2, float velocityX, float velocityY) {   
+            Log.e("Page", "OnFling action" + evt2.getAction());
+            if (velocityX < -FLING_VELOCITY) {
+                scrollRight();
+                return true;
+            } else if (velocityX > FLING_VELOCITY) {
+                scrollLeft();
+                return true;
+            }
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent arg0) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent arg0, MotionEvent arg1, float arg2, float arg3) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent arg0) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent arg0) {
+        // TODO Auto-generated method stub
+        return false;
+    }	
 }
