@@ -11,19 +11,29 @@
         <module>pageddragdropgrid-examples</module>
         <module>pageddragdropgrid</module>
     </modules>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <java.version>1.6</java.version>
+
+        <android.platform>17</android.platform>
+        <android.version>4.2.2_r2</android.version>
+        <android-support.version>12</android-support.version>
+    </properties>
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>android</groupId>
                 <artifactId>android</artifactId>
-                <version>4.2.2_r2</version>
+                <version>${android.version}</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>android.support</groupId>
                 <artifactId>compatibility-v4</artifactId>
-                <version>12</version>
+                <version>${android-support.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -33,24 +43,20 @@
             <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.5.3</version>
                 <configuration>
-                    <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
-                    <assetsDirectory>${project.basedir}/assets</assetsDirectory>
-                    <resourceDirectory>${project.basedir}/res</resourceDirectory>
-                    <nativeLibrariesDirectory>${project.basedir}/src/main/native</nativeLibrariesDirectory>
+                    <nativeLibrariesDirectory>ignored</nativeLibrariesDirectory>
                     <sdk>
-                        <platform>17</platform>
+                        <platform>${android.platform}</platform>
                     </sdk>
                 </configuration>
-                <extensions>true</extensions>
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
         </plugins>

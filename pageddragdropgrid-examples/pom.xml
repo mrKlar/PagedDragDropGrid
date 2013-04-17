@@ -21,5 +21,22 @@
             <groupId>android.support</groupId>
             <artifactId>compatibility-v4</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>ca.laplanete.mobile</groupId>
+            <artifactId>pageddragdropgrid</artifactId>
+            <version>0.1</version>
+            <type>apklib</type>
+        </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <artifactId>android-maven-plugin</artifactId>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -10,7 +10,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>pageddragdropgrid</artifactId>
-    <packaging>jar</packaging>
+    <packaging>apklib</packaging>
     <dependencies>
         <dependency>
             <groupId>android</groupId>
@@ -22,4 +22,14 @@
             <artifactId>compatibility-v4</artifactId>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <artifactId>android-maven-plugin</artifactId>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
