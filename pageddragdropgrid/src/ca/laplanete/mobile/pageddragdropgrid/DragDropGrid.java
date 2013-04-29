@@ -125,12 +125,71 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void init() {
+	    if (isInEditMode() && adapter == null) {
+	        useEditModeAdapter();
+	    }
+	    
 		setOnTouchListener(this);
 		setOnLongClickListener(this);
 		createDeleteZone();
 	}
 
-	public void setAdapter(PagedDragDropGridAdapter adapter) {
+	private void useEditModeAdapter() {
+	    adapter = new PagedDragDropGridAdapter() {
+            
+            @Override
+            public View view(int page, int index) {
+                return null;
+            }
+            
+            @Override
+            public void swapItems(int pageIndex, int itemIndexA, int itemIndexB) {
+
+            }
+            
+            @Override
+            public int rowCount() {
+                return AUTOMATIC;
+            }
+            
+            @Override
+            public void printLayout() {
+    
+            }
+            
+            @Override
+            public int pageCount() {
+                return AUTOMATIC;
+            }
+            
+            @Override
+            public void moveItemToPreviousPage(int pageIndex, int itemIndex) {
+
+            }
+            
+            @Override
+            public void moveItemToNextPage(int pageIndex, int itemIndex) {
+
+            }
+            
+            @Override
+            public int itemCountInPage(int page) {
+                return 0;
+            }
+            
+            @Override
+            public void deleteItem(int pageIndex, int itemIndex) {
+
+            }
+            
+            @Override
+            public int columnCount() {
+                return 0;
+            }
+        };       
+    }
+
+    public void setAdapter(PagedDragDropGridAdapter adapter) {
 		this.adapter = adapter;
 		addChildViews();
 	}

@@ -133,7 +133,9 @@ public class DeleteDropZoneView extends View {
 	private Bitmap getImage (int id, int width, int height) {
 	    Bitmap bmp = BitmapFactory.decodeResource( getResources(), id );
 	    Bitmap img = Bitmap.createScaledBitmap(bmp, width, height, true);
-	    bmp.recycle();
+	    if (bmp != null && !isInEditMode()) {
+	        bmp.recycle();
+	    }
 	    invalidate();
 	    return img;
 	}

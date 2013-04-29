@@ -93,7 +93,9 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
     	
     	setScrollBarStyle(SCROLLBARS_INSIDE_OVERLAY);
     	
-    	gestureScanner = new GestureDetector(getContext(), this);
+    	if (!isInEditMode()) {
+    	    gestureScanner = new GestureDetector(getContext(), this);
+    	}
 
         setOnTouchListener(new View.OnTouchListener() {
             @Override
