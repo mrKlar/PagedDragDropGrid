@@ -85,7 +85,7 @@ public interface PagedDragDropGridAdapter {
 	public void printLayout();
 
 	/**
-	 * Swaps two items in he item list in a page
+	 * Swaps two items in the item list in a page
 	 * 
 	 * @param pageIndex
 	 * @param itemIndexA
