@@ -32,8 +32,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -131,7 +134,7 @@ public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter
 		return Collections.emptyList();
 	}
 
-	@Override
+    @Override
 	public View view(int page, int index) {
 		
 		LinearLayout layout = new LinearLayout(context);
@@ -155,20 +158,27 @@ public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter
 		
 		// only set selector on every other page for demo purposes
 		// if you do not wish to use the selector functionality, simply disregard this code
-//		if(page % 2 == 0) {
-//    		layout.setBackground(context.getResources().getDrawable(R.drawable.list_selector_holo_light));
-//    		layout.setClickable(true);
-//    		layout.setOnLongClickListener(new OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View v) {
-//                    return gridview.onLongClick(v);
-//                }
-//    		});
-//		}
+		if(page % 2 == 0) {
+    		setViewBackground(layout);
+    		layout.setClickable(true);
+    		layout.setOnLongClickListener(new OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return gridview.onLongClick(v);
+                }
+    		});
+		}
 
 		layout.addView(label);
 		return layout;
 	}
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void setViewBackground(LinearLayout layout) {
+        if (android.os.Build.VERSION.SDK_INT >= 16) {
+            layout.setBackground(context.getResources().getDrawable(R.drawable.list_selector_holo_light));
+        }
+    }
 
 	private Item getItem(int page, int index) {
 		List<Item> items = itemsInPage(page);
