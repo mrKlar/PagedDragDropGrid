@@ -28,6 +28,12 @@
  */
 package ca.laplanete.mobile.pageddragdropgrid;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
@@ -35,6 +41,7 @@ import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -50,12 +57,6 @@ import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongClickListener {
 
 	private static int ANIMATION_DURATION = 250;
@@ -65,7 +66,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private OnClickListener onClickListener = null;
 	private PagedContainer container;
 
-	private SparseArray<Integer> newPositions = new SparseArray<Integer>();
+	private SparseIntArray newPositions = new SparseIntArray();
 
 	private int gridPageWidth = 0;
 	private int dragged = -1;
@@ -185,6 +186,11 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
             @Override
             public int columnCount() {
                 return 0;
+            }
+
+            @Override
+            public int deleteDropZoneLocation() {
+                return PagedDragDropGridAdapter.BOTTOM;
             }
         };       
     }
@@ -954,9 +960,30 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		deleteZone.setVisibility(View.VISIBLE);
 
 		int l = currentPage() * deleteZone.getMeasuredWidth();
-		int t = gridPageHeight - deleteZone.getMeasuredHeight();
-		deleteZone.layout(l,  t, l + gridPageWidth, t + gridPageHeight);
+		
+		int t = computeDropZoneVerticalLocation();
+		int b = computeDropZoneVerticalBottom();
+		
+		deleteZone.layout(l,  t, l + gridPageWidth, b);
 	}
+	
+	private int computeDropZoneVerticalBottom() {
+        int deleteDropZoneLocation = adapter.deleteDropZoneLocation();
+        if (deleteDropZoneLocation == PagedDragDropGridAdapter.TOP) {
+            return deleteZone.getMeasuredHeight();
+        } else {
+            return gridPageHeight - deleteZone.getMeasuredHeight() + gridPageHeight;
+        }
+    }
+
+    private int computeDropZoneVerticalLocation() {        
+        int deleteDropZOneLocation = adapter.deleteDropZoneLocation();
+        if (deleteDropZOneLocation == PagedDragDropGridAdapter.TOP) {
+            return 0;
+        } else {
+            return gridPageHeight - deleteZone.getMeasuredHeight();
+        }
+    }
 
 	private void createDeleteZone() {
 		deleteZone = new DeleteDropZoneView(getContext());

@@ -20,7 +20,15 @@ Define an adapter conforming to interface PagedDragDropGridAdapter.java
 ```java
 public interface PagedDragDropGridAdapter {
 
+    // Automatic child distribution
 	public final static int AUTOMATIC = -1; 
+	
+	// Delete drop zone location TOP
+	public final static int TOP = 1;
+	
+	// Delete drop zone location BOTTOM
+	public final static int BOTTOM = 2;
+	
 	/**
 	 * Used to create the paging
 	 * 
@@ -65,7 +73,7 @@ public interface PagedDragDropGridAdapter {
 	public void printLayout();
 
 	/**
-	 * Swaps two items in the item list in a page
+	 * Swaps two items in he item list in a page
 	 * 
 	 * @param pageIndex
 	 * @param itemIndexA
@@ -97,6 +105,13 @@ public interface PagedDragDropGridAdapter {
 	 * @param itemIndex
 	 */
 	public void deleteItem(int pageIndex, int itemIndex);
+
+	/** 
+	 * Returns the delete drop zone location.  
+	 * 
+	 * @return TOP or BOTTOM. 
+	 */
+    public int deleteDropZoneLocation();
 }
 ```
 	

@@ -248,5 +248,10 @@ public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter
 	public void deleteItem(int pageIndex, int itemIndex) {
 		getPage(pageIndex).deleteItem(itemIndex);
 	}
+
+    @Override
+    public int deleteDropZoneLocation() {        
+        return BOTTOM;
+    }
 	
 }
