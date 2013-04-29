@@ -72,7 +72,6 @@ public class DeleteDropZoneView extends View {
 
 		setBackgroundColor(Color.BLACK);
 		getBackground().setAlpha(200);
-
 	}
 
 	private Paint createTextPaint() {
