@@ -40,7 +40,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Display;
@@ -325,12 +324,19 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 			lastTouchX = (int) event.getX();
 			lastTouchY = (int) event.getY();
 
+			
+			ensureThereIsNoArtifact();
+			
 			moveDraggedView(lastTouchX, lastTouchY);
 			manageSwapPosition(lastTouchX, lastTouchY);
 			manageEdgeCoordinates(lastTouchX);
 			manageDeleteZoneHover(lastTouchX, lastTouchY);
 		}
 	}
+
+    private void ensureThereIsNoArtifact() {
+        invalidate();
+    }
 
 	private void manageDeleteZoneHover(int x, int y) {
 		Rect zone = new Rect();

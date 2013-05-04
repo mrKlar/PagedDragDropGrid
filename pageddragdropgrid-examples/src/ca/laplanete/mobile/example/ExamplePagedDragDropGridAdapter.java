@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
@@ -45,7 +44,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import ca.laplanete.mobile.pageddragdropgrid.PagedDragDropGrid;
 import ca.laplanete.mobile.pageddragdropgrid.PagedDragDropGridAdapter;
 
@@ -120,6 +118,13 @@ public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter
 		items.add(new Item(45, "Item 45",R.drawable.ic_launcher));
 		page3.setItems(items);
 		pages.add(page3);
+						
+		Page page4 = new Page();
+        items = new ArrayList<Item>();
+        items.add(new Item(46, "Item 46", R.drawable.ic_launcher));
+        
+        page4.setItems(items);
+        pages.add(page4);
 	}
 
 	@Override
