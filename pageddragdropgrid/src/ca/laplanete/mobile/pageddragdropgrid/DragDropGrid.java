@@ -222,11 +222,11 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void cancelAnimations() {
-		 for (int i=0; i < getItemViewCount(); i++) {
-			 if (i != dragged) {
+		 for (int i=0; i < getItemViewCount()-2; i++) {
+//			 if (i != dragged) {
 				 View child = getChildAt(i);
 				 child.clearAnimation();
-			 }
+//			 }
 		 }
 	}
 
@@ -261,6 +261,8 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
                     onClickListener.onClick(clickedView);
             }
 	    } else {
+	        cancelAnimations();
+	        
     		manageChildrenReordering();
     		hideDeleteView();
     		cancelEdgeTimer();
@@ -269,7 +271,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
     		dragged = -1;
     		lastTarget = -1;
     		container.enableScroll();
-    		cancelAnimations();
+    		
 	    }
 	}
 
@@ -290,8 +292,8 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		scale.setFillAfter(true);
 		scale.setFillEnabled(true);
 
-		getChildAt(dragged).clearAnimation();
-		getChildAt(dragged).startAnimation(scale);
+		getDraggedView().clearAnimation();
+		getDraggedView().startAnimation(scale);
 	}
 
 	private void reorderChildrenWhenDraggedIsDeleted() {
@@ -324,7 +326,6 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 			lastTouchX = (int) event.getX();
 			lastTouchY = (int) event.getY();
 
-			
 			ensureThereIsNoArtifact();
 			
 			moveDraggedView(lastTouchX, lastTouchY);
@@ -361,7 +362,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void moveDraggedView(int x, int y) {
-		View childAt = getChildAt(dragged);
+		View childAt = getDraggedView();
 		int width = childAt.getMeasuredWidth();
 		int height = childAt.getMeasuredHeight();
 
@@ -398,7 +399,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void stopAnimateOnTheEdge() {
-			View draggedView = getChildAt(dragged);
+			View draggedView = getDraggedView();
 			draggedView.clearAnimation();
 			animateDragged();
 	}
@@ -559,7 +560,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void animateOnTheEdge() {
-		View v = getChildAt(dragged);
+		View v = getDraggedView();
 
 		ScaleAnimation scale = new ScaleAnimation(.667f, 1.5f, .667f, 1.5f, v.getMeasuredWidth() * 3 / 4, v.getMeasuredHeight() * 3 / 4);
 		scale.setDuration(200);
@@ -577,7 +578,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 			return;
 		}
 
-		View targetView = getChildAt(viewAtPosition);
+		View targetView = getChildView(viewAtPosition);
 
 		Point oldXY = getCoorForIndex(viewAtPosition);
 		Point newXY = getCoorForIndex(newPositions.get(dragged, dragged));
@@ -744,7 +745,13 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private List<View> saveChildren() {
 		List<View> children = new ArrayList<View>();
 		for (int i = 0; i < getItemViewCount(); i++) {
-			View child = getChildAt(i);
+		    View child;
+		    if (i == dragged) {
+		        child = getDraggedView();
+		    } else {
+		        child = getChildView(i);
+		    }
+			
 			child.clearAnimation();
 			children.add(child);
 		}
@@ -823,6 +830,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 			computedRowCount = 1;
 		}
 	}
+	
 
 	private void searchBiggestChildMeasures() {
 		biggestChildWidth = 0;
@@ -932,19 +940,32 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
     
     		movingView = true;
     		dragged = positionForView(v);
+    		
+    		bringDraggedToFront();
     
     		animateMoveAllItems();
     
     		animateDragged();
     		popDeleteView();
-    
+
     		return true;
 	    }
 	    
 	    return false;
 	}
 
-	private void animateDragged() {
+	private void bringDraggedToFront() {
+	    View draggedView = getChildAt(dragged);
+	    draggedView.bringToFront();	    
+	    deleteZone.bringToFront();	    	    
+    }
+
+    private View getDraggedView() {
+        return getChildAt(getChildCount()-2);
+//        return getChildAt(dragged);
+    }
+
+    private void animateDragged() {
 
 		ScaleAnimation scale = new ScaleAnimation(1f, 1.4f, 1f, 1.4f, biggestChildWidth / 2 , biggestChildHeight / 2);
 		scale.setDuration(200);
@@ -952,8 +973,8 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		scale.setFillEnabled(true);
 
 		if (aViewIsDragged()) {
-			getChildAt(dragged).clearAnimation();
-			getChildAt(dragged).startAnimation(scale);
+			getDraggedView().clearAnimation();
+			getDraggedView().startAnimation(scale);
 		}
 	}
 
@@ -962,7 +983,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void popDeleteView() {
-
+	    
 		deleteZone.setVisibility(View.VISIBLE);
 
 		int l = currentPage() * deleteZone.getMeasuredWidth();
@@ -971,6 +992,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		int b = computeDropZoneVerticalBottom();
 		
 		deleteZone.layout(l,  t, l + gridPageWidth, b);
+		
 	}
 	
 	private int computeDropZoneVerticalBottom() {
@@ -997,18 +1019,29 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void hideDeleteView() {
-		deleteZone.setVisibility(View.GONE);
+	    deleteZone.setVisibility(View.INVISIBLE);
 	}
 
 	private int positionForView(View v) {
 		for (int index = 0; index < getItemViewCount(); index++) {
-			View child = getChildAt(index);
+			View child = getChildView(index);
 				if (isPointInsideView(initialX, initialY, child)) {
 					return index;
 				}
 		}
 		return -1;
 	}
+
+    private View getChildView(int index) {
+        if (dragged != -1) {
+            if (index >= dragged) {
+                return getChildAt(index -1);
+            }
+        } 
+
+        return getChildAt(index);
+        
+    }
 
 	private boolean isPointInsideView(float x, float y, View view) {
 		int location[] = new int[2];
