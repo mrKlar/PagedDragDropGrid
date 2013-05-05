@@ -39,7 +39,9 @@ import android.widget.HorizontalScrollView;
 public class PagedDragDropGrid extends HorizontalScrollView implements PagedContainer, OnGestureListener {
 
     private static final int FLING_VELOCITY = 500;
-    private int mActivePage = 0;
+    private int activePage = 0;
+    private boolean activePageRestored = false;
+    
 	private DragDropGrid grid;
 	private PagedDragDropGridAdapter adapter;
     private OnClickListener listener;
@@ -139,7 +141,7 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 
 	@Override
 	public void scrollToPage(int page) {
-		mActivePage = page;
+		activePage = page;
 		int onePageWidth = getMeasuredWidth();
 		int scrollTo = page*onePageWidth;
         smoothScrollTo(scrollTo, 0);
@@ -147,7 +149,7 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 
 	@Override
 	public void scrollLeft() {		
-		int newPage = mActivePage-1;
+		int newPage = activePage-1;
 		if (canScrollToPreviousPage()) {
 			scrollToPage(newPage);
 		}
@@ -155,7 +157,7 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 
 	@Override
 	public void scrollRight() {
-		int newPage = mActivePage+1;
+		int newPage = activePage+1;
 		if (canScrollToNextPage()) {		
 			scrollToPage(newPage);
 		}
@@ -163,7 +165,7 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 
 	@Override
 	public int currentPage() {
-		return mActivePage;
+		return activePage;
 	}
 
 	@Override
@@ -178,28 +180,33 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 
 	@Override
 	public boolean canScrollToNextPage() {
-		int newPage = mActivePage+1;
+		int newPage = activePage+1;
 		return (newPage < adapter.pageCount());
 	}
 
 	@Override
 	public boolean canScrollToPreviousPage() {
-		int newPage = mActivePage-1;
+		int newPage = activePage-1;
 		return (newPage >= 0);
 	}
 
-	public void setCurrentPage(int currentPage) {
-	    mActivePage = currentPage;
+	public void restoreCurrentPage(int currentPage) {
+	    activePage = currentPage;
+	    activePageRestored = true;
 	}
 	
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-	    super.onLayout(changed, l, t, r, b);	    
-	    scrollToRestoredPage();
+	    super.onLayout(changed, l, t, r, b);	 
+	    
+	    if (activePageRestored) {
+	        activePageRestored = false;
+	        scrollToRestoredPage();
+	    }
 	}
 
-    private void scrollToRestoredPage() {
-        scrollToPage(mActivePage);
+    private void scrollToRestoredPage() {        
+        scrollToPage(activePage);
     }
 	
     @Override

@@ -436,8 +436,6 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 							animateMoveAllItems();
 							animateDragged();
 							popDeleteView();
-							
-//							bringDraggedToFront();
 						}
 					});
 		    	}
@@ -469,7 +467,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		int lastItem = adapter.itemCountInPage(currentPage)-1;
 		dragged = positionOfItem(currentPage, lastItem);
 
-		requestLayout();
+//		requestLayout();
 		
 		stopAnimateOnTheEdge();
 	}
@@ -483,7 +481,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		int lastItem = adapter.itemCountInPage(currentPage)-1;
 		dragged = positionOfItem(currentPage, lastItem);
 
-		requestLayout();
+//		requestLayout();
 				
 		stopAnimateOnTheEdge();
 	}
@@ -737,7 +735,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private void reorderChildren() {
 		List<View> children = cleanUnorderedChildren();
 		addReorderedChildrenToParent(children);
-		requestLayout();
+//		requestLayout();
 	}
 
 	private List<View> cleanUnorderedChildren() {

@@ -64,7 +64,7 @@ public class ExampleActivity extends Activity implements OnClickListener {
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 	  super.onRestoreInstanceState(savedInstanceState);
       int savedPage = savedInstanceState.getInt(CURRENT_PAGE_KEY);
-      gridview.setCurrentPage(savedPage);
+      gridview.restoreCurrentPage(savedPage);
 	}
 	
 	
