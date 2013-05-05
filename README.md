@@ -7,12 +7,13 @@ Supports Android 2.2 (API 8) and up
 
 Tested on a Nexus One, Galaxy Nexus and a Nexus 7
 
-Example video: http://youtu.be/FYTSRfthSuQ
+Example video: 
+
+v0.1 : http://youtu.be/FYTSRfthSuQ
+v0.2 : http://youtu.be/kZV8lx-54nc
 
 
-Note: The Master branch is in active development.
-
-
+Note: The Master branch is in active development.  Use tags for a more stable version.
 
 
 Usage
