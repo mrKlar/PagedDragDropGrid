@@ -153,6 +153,7 @@ public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter
 		layout.addView(icon);
 		
 		TextView label = new TextView(context);
+		label.setTag("text");
 		label.setText(item.getName());	
 		label.setTextColor(Color.BLACK);
 		label.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
