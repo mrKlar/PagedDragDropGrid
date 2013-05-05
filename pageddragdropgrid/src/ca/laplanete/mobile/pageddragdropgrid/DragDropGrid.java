@@ -40,7 +40,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Display;
@@ -56,8 +55,6 @@ import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongClickListener {
 
@@ -199,7 +196,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 
     public void setAdapter(PagedDragDropGridAdapter adapter) {
 		this.adapter = adapter;
-		addChildViews();
+		addChildViews();		
 	}
 
 	public void setOnClickListener(OnClickListener l) {
@@ -226,10 +223,8 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 
 	private void cancelAnimations() {
 		 for (int i=0; i < getItemViewCount()-2; i++) {
-//			 if (i != dragged) {
-				 View child = getChildAt(i);
-				 child.clearAnimation();
-//			 }
+			 View child = getChildAt(i);
+			 child.clearAnimation();
 		 }
 	}
 

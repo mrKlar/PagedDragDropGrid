@@ -41,6 +41,8 @@ import ca.laplanete.mobile.pageddragdropgrid.PagedDragDropGrid;
 
 public class ExampleActivity extends Activity implements OnClickListener {
     
+    private String CURRENT_PAGE_KEY = "CURRENT_PAGE_KEY";
+    
     private PagedDragDropGrid gridview;
 
 	@Override
@@ -48,11 +50,29 @@ public class ExampleActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.example);
-		gridview = (PagedDragDropGrid) findViewById(R.id.gridview);		
-		gridview.setAdapter(new ExamplePagedDragDropGridAdapter(this, gridview));
-		gridview.setClickListener(this);
+		gridview = (PagedDragDropGrid) findViewById(R.id.gridview);	
 		
-		gridview.setBackgroundColor(Color.LTGRAY);
+		ExamplePagedDragDropGridAdapter adapter = new ExamplePagedDragDropGridAdapter(this, gridview);
+		
+        gridview.setAdapter(adapter);
+		gridview.setClickListener(this);
+
+		gridview.setBackgroundColor(Color.LTGRAY);				
+	}	
+	
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+	  super.onRestoreInstanceState(savedInstanceState);
+      int savedPage = savedInstanceState.getInt(CURRENT_PAGE_KEY);
+      gridview.setCurrentPage(savedPage);
+	}
+	
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+
+	    outState.putInt(CURRENT_PAGE_KEY, gridview.currentPage());
+	    super.onSaveInstanceState(outState);
 	}
 	
     @Override

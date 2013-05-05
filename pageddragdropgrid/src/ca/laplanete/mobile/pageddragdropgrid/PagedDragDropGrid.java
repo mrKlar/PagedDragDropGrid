@@ -86,7 +86,7 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 
 	private void initGrid() {
 		grid = new DragDropGrid(getContext());
-    	addView(grid);
+    	addView(grid);    	
 	}
  
     public void initPagedScroll(){
@@ -188,11 +188,22 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 		return (newPage >= 0);
 	}
 
+	public void setCurrentPage(int currentPage) {
+	    mActivePage = currentPage;
+	}
 	
+	@Override
+	protected void onLayout(boolean changed, int l, int t, int r, int b) {
+	    super.onLayout(changed, l, t, r, b);	    
+	    scrollToRestoredPage();
+	}
+
+    private void scrollToRestoredPage() {
+        scrollToPage(mActivePage);
+    }
 	
     @Override
     public boolean onDown(MotionEvent arg0) {
-        // TODO Auto-generated method stub
         return false;
     }
 
@@ -210,25 +221,19 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 
     @Override
     public void onLongPress(MotionEvent arg0) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
     public boolean onScroll(MotionEvent arg0, MotionEvent arg1, float arg2, float arg3) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public void onShowPress(MotionEvent arg0) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
     public boolean onSingleTapUp(MotionEvent arg0) {
-        // TODO Auto-generated method stub
         return false;
     }	
 }
