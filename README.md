@@ -10,6 +10,7 @@ Tested on a Nexus One, Galaxy Nexus and a Nexus 7
 Example video: 
 
 v0.1 : http://youtu.be/FYTSRfthSuQ
+
 v0.2 : http://youtu.be/kZV8lx-54nc
 
 
