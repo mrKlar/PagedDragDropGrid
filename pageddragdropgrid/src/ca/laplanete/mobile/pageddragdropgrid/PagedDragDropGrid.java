@@ -35,6 +35,7 @@ import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 
 public class PagedDragDropGrid extends HorizontalScrollView implements PagedContainer, OnGestureListener {
 
@@ -42,10 +43,16 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
     private int activePage = 0;
     private boolean activePageRestored = false;
     
-	private DragDropGrid grid;
+	private DragDropGrid grid1;
+	private DragDropGrid grid2;
+	
 	private PagedDragDropGridAdapter adapter;
+	private PagedDragDropGridAdapter adapter2;
+	
     private OnClickListener listener;
     private GestureDetector gestureScanner;
+    private LinearLayout linearLayout;
+    
 
     public PagedDragDropGrid(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -87,8 +94,11 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
     }
 
 	private void initGrid() {
-		grid = new DragDropGrid(getContext());
-    	addView(grid);    	
+	    grid1 = new DragDropGrid(getContext());
+		linearLayout.addView(grid1);  
+		
+		grid2 = new DragDropGrid(getContext());		
+		linearLayout.addView(grid2);   
 	}
  
     public void initPagedScroll(){
@@ -114,29 +124,44 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
                 }
             }
         });
+        
+        linearLayout = (LinearLayout) inflate(getContext(), R.layout.horizontalpages, null);
+        addView(linearLayout);
+        
     }
     
     public void setAdapter(PagedDragDropGridAdapter adapter) {
     	this.adapter = adapter;
-		grid.setAdapter(adapter);
-		grid.setContainer(this);
+		grid1.setAdapter(adapter);
+		grid1.setContainer(this);
 	}
+    
+    public void setAdapter2(PagedDragDropGridAdapter adapter) {
+        this.adapter2 = adapter;
+        grid2.setAdapter(adapter);
+        grid2.setContainer(this);
+    }
     
     public void setClickListener(OnClickListener l) {
         this.listener = l;
-        grid.setOnClickListener(l);
+        grid1.setOnClickListener(l);
+        grid2.setOnClickListener(l);
     }
     
     public boolean onLongClick(View v) {
-        return grid.onLongClick(v);
+        return grid1.onLongClick(v);
     }
 
     public void notifyDataSetChanged() {
         removeAllViews();
         initGrid();
-        grid.setAdapter(adapter);
-        grid.setContainer(this);
-        grid.setOnClickListener(listener);
+        grid1.setAdapter(adapter);
+        grid1.setContainer(this);
+        grid1.setOnClickListener(listener);
+        
+        grid2.setAdapter(adapter);
+        grid2.setContainer(this);
+        grid2.setOnClickListener(listener);
     }
 
 	@Override
