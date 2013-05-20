@@ -202,5 +202,10 @@ public class Page1TempAdapter implements PagedDragDropGridAdapter {
     public int deleteDropZoneLocation() {        
         return BOTTOM;
     }
+
+    @Override
+    public boolean showRemoveDropZone() {
+        return true;
+    }
 	
 }
