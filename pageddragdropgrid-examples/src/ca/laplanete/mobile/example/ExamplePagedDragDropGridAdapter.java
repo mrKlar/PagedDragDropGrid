@@ -259,5 +259,10 @@ public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter
     public int deleteDropZoneLocation() {        
         return BOTTOM;
     }
+
+    @Override
+    public boolean showRemoveDropZone() {
+        return true;
+    }
 	
 }
