@@ -191,6 +191,11 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
             public int deleteDropZoneLocation() {
                 return PagedDragDropGridAdapter.BOTTOM;
             }
+
+            @Override
+            public boolean showRemoveDropZone() {
+                return true;
+            }
         };       
     }
 
@@ -1009,16 +1014,22 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 
 	private void popDeleteView() {
 	    
-		deleteZone.setVisibility(View.VISIBLE);
-
-		int l = currentPage() * deleteZone.getMeasuredWidth();
-		
-		int t = computeDropZoneVerticalLocation();
-		int b = computeDropZoneVerticalBottom();
-		
-		deleteZone.layout(l,  t, l + gridPageWidth, b);
+	    if (adapter.showRemoveDropZone()) {
+    		showDeleteView();
+	    }
 		
 	}
+
+    private void showDeleteView() {
+        deleteZone.setVisibility(View.VISIBLE);
+   
+        int l = currentPage() * deleteZone.getMeasuredWidth();
+        
+        int t = computeDropZoneVerticalLocation();
+        int b = computeDropZoneVerticalBottom();
+        
+        deleteZone.layout(l,  t, l + gridPageWidth, b);
+    }
 	
 	private int computeDropZoneVerticalBottom() {
         int deleteDropZoneLocation = adapter.deleteDropZoneLocation();
