@@ -116,12 +116,12 @@ public interface PagedDragDropGridAdapter {
 	 * 
 	 * @return TOP or BOTTOM. 
 	 */
-    	public int deleteDropZoneLocation();
+	public int deleteDropZoneLocation();
 
 	/**
-    	 * Tells the grid to show or not the remove drop zone when moving an item
-    	 */
-        public boolean showRemoveDropZone();
+	 * Tells the grid to show or not the remove drop zone when moving an item
+ 	 */
+	public boolean showRemoveDropZone();
 }
 ```
 	
@@ -145,6 +145,15 @@ gridview.setAdapter(new ExamplePagedDragDropGridAdapter(this));
 
 /* Optionally set an onClickListener */
 gridview.setClickListener(this);
+
+/* Optionally set an setOnPageChangedListener */
+gridview.setOnPageChangedListener(new OnPageChangedListener() {            
+@Override
+public void onPageChanged(PagedDragDropGrid sender, int newPageNumber) {
+        Toast.makeText(ExampleActivity.this, "Page changed to page " + newPageNumber, Toast.LENGTH_SHORT).show();                
+    }
+});
+
 ```
 
 Inspired by
