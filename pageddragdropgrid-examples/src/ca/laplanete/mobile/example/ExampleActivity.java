@@ -37,6 +37,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
+import ca.laplanete.mobile.pageddragdropgrid.OnPageChangedListener;
 import ca.laplanete.mobile.pageddragdropgrid.PagedDragDropGrid;
 
 public class ExampleActivity extends Activity implements OnClickListener {
@@ -57,7 +58,15 @@ public class ExampleActivity extends Activity implements OnClickListener {
         gridview.setAdapter(adapter);
 		gridview.setClickListener(this);
 
-		gridview.setBackgroundColor(Color.LTGRAY);				
+		gridview.setBackgroundColor(Color.LTGRAY);	
+		
+		
+		gridview.setOnPageChangedListener(new OnPageChangedListener() {            
+            @Override
+            public void onPageChanged(PagedDragDropGrid sender, int newPageNumber) {
+                Toast.makeText(ExampleActivity.this, "Page changed to page " + newPageNumber, Toast.LENGTH_SHORT).show();                
+            }
+        });
 	}	
 	
 	@Override
