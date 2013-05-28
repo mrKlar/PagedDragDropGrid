@@ -124,7 +124,7 @@ public interface PagedDragDropGridAdapter {
 	 * @return TOP or BOTTOM. 
 	 */
     public int deleteDropZoneLocation();
-    
+
     /**
      * Tells the grid to show or not the remove drop zone when moving an item
      */

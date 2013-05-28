@@ -53,6 +53,8 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
     private GestureDetector gestureScanner;
     private LinearLayout linearLayout;
     
+    
+    private OnPageChangedListener pageChangedListener;
 
     public PagedDragDropGrid(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -100,6 +102,7 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 		grid2 = new DragDropGrid(getContext());		
 		linearLayout.addView(grid2);   
 	}
+	
  
     public void initPagedScroll(){
     	
@@ -128,6 +131,10 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
         linearLayout = (LinearLayout) inflate(getContext(), R.layout.horizontalpages, null);
         addView(linearLayout);
         
+    }
+    
+    public void setOnPageChangedListener(OnPageChangedListener listener) {
+        this.pageChangedListener = listener;
     }
     
     public void setAdapter(PagedDragDropGridAdapter adapter) {
@@ -170,6 +177,8 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 		int onePageWidth = getMeasuredWidth();
 		int scrollTo = page*onePageWidth;
         smoothScrollTo(scrollTo, 0);
+        
+        pageChangedListener.onPageChanged(this, page);
 	}
 
 	@Override
