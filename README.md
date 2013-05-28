@@ -148,11 +148,11 @@ gridview.setClickListener(this);
 
 /* Optionally set an setOnPageChangedListener */
 gridview.setOnPageChangedListener(new OnPageChangedListener() {            
-@Override
-public void onPageChanged(PagedDragDropGrid sender, int newPageNumber) {
-        Toast.makeText(ExampleActivity.this, "Page changed to page " + newPageNumber, Toast.LENGTH_SHORT).show();                
-    }
-});
+	@Override
+	public void onPageChanged(PagedDragDropGrid sender, int newPageNumber) {
+	        Toast.makeText(ExampleActivity.this, "Page changed to page " + newPageNumber, Toast.LENGTH_SHORT).show();                
+	    }
+	});
 
 ```
 
