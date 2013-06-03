@@ -14,9 +14,6 @@ v0.1 : http://youtu.be/FYTSRfthSuQ
 v0.2 : http://youtu.be/0HI2meKKLYk
 
 
-Note: The Master branch is in active development.  Use tags for a more stable version.
-
-
 Usage
 -----
 
