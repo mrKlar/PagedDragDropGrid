@@ -56,7 +56,7 @@ public class ExampleActivity extends Activity implements OnClickListener {
 		ExamplePagedDragDropGridAdapter adapter = new ExamplePagedDragDropGridAdapter(this, gridview);
 		
         gridview.setAdapter(new Page1TempAdapter(this, gridview));
-        gridview.setAdapter2(new Page2TempAdapter(this, gridview));
+//        gridview.setAdapter2(new Page2TempAdapter(this, gridview));
         
 		gridview.setClickListener(this);
 

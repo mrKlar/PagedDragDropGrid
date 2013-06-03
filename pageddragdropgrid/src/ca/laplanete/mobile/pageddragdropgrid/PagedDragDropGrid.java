@@ -28,6 +28,9 @@
  */
 package ca.laplanete.mobile.pageddragdropgrid;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -43,8 +46,10 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
     private int activePage = 0;
     private boolean activePageRestored = false;
     
-	private DragDropGrid grid1;
-	private DragDropGrid grid2;
+//	private DragDropGrid grid1;
+//	private DragDropGrid grid2;
+	
+	private List<DragDropGrid> pages = new ArrayList<DragDropGrid>();
 	
 	private PagedDragDropGridAdapter adapter;
 	private PagedDragDropGridAdapter adapter2;
@@ -59,48 +64,50 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
     public PagedDragDropGrid(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initPagedScroll();
-        initGrid();
+//        initGrid();
     }
  
     public PagedDragDropGrid(Context context, AttributeSet attrs) {
         super(context, attrs);
         initPagedScroll();
-        initGrid();
+//        initGrid();
     }
  
     public PagedDragDropGrid(Context context) {
         super(context);
         initPagedScroll();
-        initGrid();
+//        initGrid();
     }
  
     public PagedDragDropGrid(Context context, AttributeSet attrs, int defStyle, PagedDragDropGridAdapter adapter) {
         super(context, attrs, defStyle);
         this.adapter = adapter;
         initPagedScroll();
-        initGrid();   
+//        initGrid();   
     }
  
     public PagedDragDropGrid(Context context, AttributeSet attrs, PagedDragDropGridAdapter adapter) {
         super(context, attrs);
         this.adapter = adapter;
         initPagedScroll();
-        initGrid();   
+//        initGrid();   
     }
  
     public PagedDragDropGrid(Context context, PagedDragDropGridAdapter adapter) {
         super(context);
         this.adapter = adapter;
         initPagedScroll();        
-        initGrid();    	
+//        initGrid();    	
     }
 
-	private void initGrid() {
-	    grid1 = new DragDropGrid(getContext());
-		linearLayout.addView(grid1);  
+	private DragDropGrid initGrid() {
+	    DragDropGrid grid = new DragDropGrid(getContext());
+		linearLayout.addView(grid);  
 		
-		grid2 = new DragDropGrid(getContext());		
-		linearLayout.addView(grid2);   
+		return grid;
+		
+//		grid2 = new DragDropGrid(getContext());		
+//		linearLayout.addView(grid2);   
 	}
 	
  
@@ -139,36 +146,53 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
     
     public void setAdapter(PagedDragDropGridAdapter adapter) {
     	this.adapter = adapter;
-		grid1.setAdapter(adapter);
-		grid1.setContainer(this);
+    	
+    	initPages(adapter);
 	}
-    
-    public void setAdapter2(PagedDragDropGridAdapter adapter) {
-        this.adapter2 = adapter;
-        grid2.setAdapter(adapter);
-        grid2.setContainer(this);
+
+    private void initPages(PagedDragDropGridAdapter adapter) {
+        for (int i=0;i<adapter.pageCount();i++) {
+    	    DragDropGrid grid = initGrid();
+    	    
+    	    grid.setAdapter(adapter);
+    	    grid.setContainer(this);
+    	    grid.setOnClickListener(listener);
+            
+    	    pages.add(grid);
+    	}
     }
+    
+//    public void setAdapter2(PagedDragDropGridAdapter adapter) {
+//        this.adapter2 = adapter;
+//        grid2.setAdapter(adapter);
+//        grid2.setContainer(this);
+//    }
     
     public void setClickListener(OnClickListener l) {
         this.listener = l;
-        grid1.setOnClickListener(l);
-        grid2.setOnClickListener(l);
+        
+        for (DragDropGrid grid : pages) {
+            grid.setOnClickListener(l);
+        }        
     }
     
     public boolean onLongClick(View v) {
-        return grid1.onLongClick(v);
+        return pages.get(0).onLongClick(v);
     }
 
     public void notifyDataSetChanged() {
         removeAllViews();
-        initGrid();
-        grid1.setAdapter(adapter);
-        grid1.setContainer(this);
-        grid1.setOnClickListener(listener);
         
-        grid2.setAdapter(adapter);
-        grid2.setContainer(this);
-        grid2.setOnClickListener(listener);
+        initPages(adapter);
+        
+//        initGrid();
+//        grid1.setAdapter(adapter);
+//        grid1.setContainer(this);
+//        grid1.setOnClickListener(listener);
+//        
+//        grid2.setAdapter(adapter);
+//        grid2.setContainer(this);
+//        grid2.setOnClickListener(listener);
     }
 
 	@Override
