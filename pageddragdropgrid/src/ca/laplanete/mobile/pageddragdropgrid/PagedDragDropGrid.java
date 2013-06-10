@@ -39,6 +39,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 public class PagedDragDropGrid extends HorizontalScrollView implements PagedContainer, OnGestureListener {
 
@@ -52,7 +53,7 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 	private List<DragDropGrid> pages = new ArrayList<DragDropGrid>();
 	
 	private PagedDragDropGridAdapter adapter;
-	private PagedDragDropGridAdapter adapter2;
+//	private PagedDragDropGridAdapter adapter2;
 	
     private OnClickListener listener;
     private GestureDetector gestureScanner;
@@ -100,14 +101,18 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 //        initGrid();    	
     }
 
-	private DragDropGrid initGrid() {
-	    DragDropGrid grid = new DragDropGrid(getContext());
-		linearLayout.addView(grid);  
+	private DragDropGrid initGridForPage() {
+	    DragDropGrid grid = new DragDropGrid(getContext());	    
+	    	    
+	    ScrollView scroll = new ScrollView(getContext());
+	    scroll.setBackgroundColor(getContext().getResources().getColor(android.R.color.transparent));
+	    scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+	                                                 LayoutParams.MATCH_PARENT));
+	    scroll.addView(grid);
+	    
+		linearLayout.addView(scroll);  
 		
-		return grid;
-		
-//		grid2 = new DragDropGrid(getContext());		
-//		linearLayout.addView(grid2);   
+		return grid;		  
 	}
 	
  
@@ -151,9 +156,10 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 	}
 
     private void initPages(PagedDragDropGridAdapter adapter) {
-        for (int i=0;i<adapter.pageCount();i++) {
-    	    DragDropGrid grid = initGrid();
+        for (int page=0;page<adapter.pageCount();page++) {
+    	    DragDropGrid grid = initGridForPage();
     	    
+    	    grid.setPage(page);
     	    grid.setAdapter(adapter);
     	    grid.setContainer(this);
     	    grid.setOnClickListener(listener);
@@ -161,12 +167,6 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
     	    pages.add(grid);
     	}
     }
-    
-//    public void setAdapter2(PagedDragDropGridAdapter adapter) {
-//        this.adapter2 = adapter;
-//        grid2.setAdapter(adapter);
-//        grid2.setContainer(this);
-//    }
     
     public void setClickListener(OnClickListener l) {
         this.listener = l;
