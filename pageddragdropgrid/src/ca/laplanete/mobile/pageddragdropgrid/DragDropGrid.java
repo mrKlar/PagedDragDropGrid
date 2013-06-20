@@ -125,6 +125,8 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void init() {
+	    
+//	    setBackgroundColor(getContext().getResources().getColor(android.R.color.transparent));
 	    if (isInEditMode() && adapter == null) {
 	        useEditModeAdapter();
 	    }

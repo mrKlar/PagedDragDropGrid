@@ -48,27 +48,39 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
     private GestureDetector gestureScanner;
     
     private OnPageChangedListener pageChangedListener;
+    private int xmlRes;
 
     public PagedDragDropGrid(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        
+        setBackground(attrs);
+        
         initPagedScroll();
         initGrid();
     }
  
     public PagedDragDropGrid(Context context, AttributeSet attrs) {
         super(context, attrs);
+        
+        setBackground(attrs);
+        
         initPagedScroll();
         initGrid();
     }
  
     public PagedDragDropGrid(Context context) {
         super(context);
+
+        
         initPagedScroll();
         initGrid();
     }
  
     public PagedDragDropGrid(Context context, AttributeSet attrs, int defStyle, PagedDragDropGridAdapter adapter) {
         super(context, attrs, defStyle);
+        
+        setBackground(attrs);
+        
         this.adapter = adapter;
         initPagedScroll();
         initGrid();   
@@ -76,6 +88,9 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
  
     public PagedDragDropGrid(Context context, AttributeSet attrs, PagedDragDropGridAdapter adapter) {
         super(context, attrs);
+        
+        setBackground(attrs);
+        
         this.adapter = adapter;
         initPagedScroll();
         initGrid();   
@@ -83,6 +98,8 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
  
     public PagedDragDropGrid(Context context, PagedDragDropGridAdapter adapter) {
         super(context);
+       
+        
         this.adapter = adapter;
         initPagedScroll();        
         initGrid();    	
@@ -90,12 +107,18 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 
 	private void initGrid() {
 		grid = new DragDropGrid(getContext());
+		grid.setBackgroundResource(xmlRes);
     	addView(grid);    	
 	}
 	
- 
+    private void setBackground(AttributeSet attrs) {
+        final String xmlns="http://schemas.android.com/apk/res/android";
+        xmlRes = attrs.getAttributeResourceValue(xmlns, "background", -1);
+    }
+   
     public void initPagedScroll(){
     	
+        
     	setScrollBarStyle(SCROLLBARS_INSIDE_OVERLAY);
     	
     	if (!isInEditMode()) {
