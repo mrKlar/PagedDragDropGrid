@@ -4,9 +4,9 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="16"/>
+    <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="19"/>
 
-    <application android:hardwareAccelerated="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name"  >
+    <application android:hardwareAccelerated="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name"  android:allowBackup="true">
         <activity android:name=".ExampleActivity"
                   android:label="@string/app_name">
             <intent-filter>
