@@ -208,6 +208,11 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
             public Object getItemAt(int page, int index) {
                 return null;
             }
+
+            @Override
+            public boolean disableZoomAnimationsOnChangePage() {
+                return false;
+            }
         };       
     }
 
@@ -230,6 +235,30 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		}
 		deleteZone.bringToFront();
 	}
+
+    public void reloadViews() {
+        for (int page = 0; page < adapter.pageCount(); page++) {
+            for (int item = 0; item < adapter.itemCountInPage(page); item++) {
+                if(indexOfItem(page, item) == -1) {
+                    View v = adapter.view(page, item);
+                    v.setTag(adapter.getItemAt(page,item));
+                    addView(v);
+                }
+            }
+        }
+        deleteZone.bringToFront();
+    }
+
+    public int indexOfItem(int page, int index) {
+        Object item = adapter.getItemAt(page, index);
+
+        for(int i = 0; i<this.getChildCount(); i++) {
+            View v = this.getChildAt(i);
+            if(item.equals(v.getTag()))
+                return i;
+        }
+        return -1;
+    }
 
     public void removeItem(int page, int index) {
         Object item = adapter.getItemAt(page, index);
@@ -602,15 +631,17 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void animateOnTheEdge() {
-		View v = getDraggedView();
+        if(!adapter.disableZoomAnimationsOnChangePage()) {
+            View v = getDraggedView();
 
-		ScaleAnimation scale = new ScaleAnimation(.667f, 1.5f, .667f, 1.5f, v.getMeasuredWidth() * 3 / 4, v.getMeasuredHeight() * 3 / 4);
-		scale.setDuration(200);
-		scale.setRepeatMode(Animation.REVERSE);
-		scale.setRepeatCount(Animation.INFINITE);
+            ScaleAnimation scale = new ScaleAnimation(.667f, 1.5f, .667f, 1.5f, v.getMeasuredWidth() * 3 / 4, v.getMeasuredHeight() * 3 / 4);
+            scale.setDuration(200);
+            scale.setRepeatMode(Animation.REVERSE);
+            scale.setRepeatCount(Animation.INFINITE);
 
-		v.clearAnimation();
-		v.startAnimation(scale);
+            v.clearAnimation();
+            v.startAnimation(scale);
+        }
 	}
 
 	private void animateGap(int targetLocationInGrid) {

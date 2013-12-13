@@ -145,4 +145,11 @@ public interface PagedDragDropGridAdapter {
      */
      public Object getItemAt(int page, int index);
 
+    /**
+     * Tells the grid to disable the zoom animation on change page
+     */
+     public boolean disableZoomAnimationsOnChangePage();
+
+
+
 }

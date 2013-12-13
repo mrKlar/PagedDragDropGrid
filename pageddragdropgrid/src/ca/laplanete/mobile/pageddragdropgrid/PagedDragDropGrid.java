@@ -166,11 +166,7 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
     }
 
     public void notifyDataSetChanged() {
-        removeAllViews();
-        initGrid();
-        grid.setAdapter(adapter);
-        grid.setContainer(this);
-        grid.setOnClickListener(listener);
+        grid.reloadViews();
     }
 
 	@Override
