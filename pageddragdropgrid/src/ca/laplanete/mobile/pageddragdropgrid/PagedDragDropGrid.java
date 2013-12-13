@@ -175,8 +175,8 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 		int onePageWidth = getMeasuredWidth();
 		int scrollTo = page*onePageWidth;
         smoothScrollTo(scrollTo, 0);
-        
-        pageChangedListener.onPageChanged(this, page);
+        if(pageChangedListener != null)
+            pageChangedListener.onPageChanged(this, page);
 	}
 
 	@Override
