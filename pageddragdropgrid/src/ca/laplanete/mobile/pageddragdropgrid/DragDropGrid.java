@@ -198,6 +198,11 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
             public boolean showRemoveDropZone() {
                 return true;
             }
+
+            @Override
+            public int getPageWidth(int page) {
+                return 0;
+            }
         };       
     }
 
@@ -896,6 +901,11 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		if (widthMode == MeasureSpec.UNSPECIFIED) {
 			widthSize = display.getWidth();
 		}
+
+        if(adapter.getPageWidth(currentPage()) != 0) {
+            widthSize = adapter.getPageWidth(currentPage());
+        }
+
 		gridPageWidth = widthSize;
 		return widthSize;
 	}

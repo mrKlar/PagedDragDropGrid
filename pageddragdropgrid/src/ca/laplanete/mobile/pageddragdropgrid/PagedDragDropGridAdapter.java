@@ -129,4 +129,11 @@ public interface PagedDragDropGridAdapter {
      * Tells the grid to show or not the remove drop zone when moving an item
      */
     public boolean showRemoveDropZone();
+
+    /**
+     * Tells the grid, the page defined width
+     * If page width is zero, display width is taken
+     * @return the page width
+     */
+    public int getPageWidth(int page);
 }
