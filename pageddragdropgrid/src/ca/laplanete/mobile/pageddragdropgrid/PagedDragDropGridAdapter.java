@@ -136,4 +136,13 @@ public interface PagedDragDropGridAdapter {
      * @return the page width
      */
     public int getPageWidth(int page);
+
+    /**
+     * Gets the item displayed by the datasource
+     * @param page the page we are looking at
+     * @param index the index of the datasource
+     * @return your object
+     */
+     public Object getItemAt(int page, int index);
+
 }

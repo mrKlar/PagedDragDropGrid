@@ -203,6 +203,11 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
             public int getPageWidth(int page) {
                 return 0;
             }
+
+            @Override
+            public Object getItemAt(int page, int index) {
+                return null;
+            }
         };       
     }
 
@@ -218,11 +223,24 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private void addChildViews() {
 		for (int page = 0; page < adapter.pageCount(); page++) {
 			for (int item = 0; item < adapter.itemCountInPage(page); item++) {
-				addView(adapter.view(page, item));
+                View v = adapter.view(page, item);
+                v.setTag(adapter.getItemAt(page,item));
+                addView(v);
 			}
 		}
 		deleteZone.bringToFront();
 	}
+
+    public void removeItem(int page, int index) {
+        Object item = adapter.getItemAt(page, index);
+        for(int i = 0; i<this.getChildCount(); i++) {
+            View v = (View)this.getChildAt(i);
+            if(item.equals(v.getTag())) {
+                this.removeView(v);
+                return;
+            }
+        }
+    }
 
 	private void animateMoveAllItems() {
 		Animation rotateAnimation = createFastRotateAnimation();
