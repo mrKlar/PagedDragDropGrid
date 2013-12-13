@@ -161,12 +161,12 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
         return grid.onLongClick(v);
     }
 
+    public void removeItem(int page, int index) {
+        grid.removeItem(page, index);
+    }
+
     public void notifyDataSetChanged() {
-        removeAllViews();
-        initGrid();
-        grid.setAdapter(adapter);
-        grid.setContainer(this);
-        grid.setOnClickListener(listener);
+        grid.reloadViews();
     }
 
 	@Override
@@ -175,8 +175,8 @@ public class PagedDragDropGrid extends HorizontalScrollView implements PagedCont
 		int onePageWidth = getMeasuredWidth();
 		int scrollTo = page*onePageWidth;
         smoothScrollTo(scrollTo, 0);
-        
-        pageChangedListener.onPageChanged(this, page);
+        if(pageChangedListener != null)
+            pageChangedListener.onPageChanged(this, page);
 	}
 
 	@Override

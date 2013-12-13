@@ -198,6 +198,21 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
             public boolean showRemoveDropZone() {
                 return true;
             }
+
+            @Override
+            public int getPageWidth(int page) {
+                return 0;
+            }
+
+            @Override
+            public Object getItemAt(int page, int index) {
+                return null;
+            }
+
+            @Override
+            public boolean disableZoomAnimationsOnChangePage() {
+                return false;
+            }
         };       
     }
 
@@ -213,11 +228,48 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private void addChildViews() {
 		for (int page = 0; page < adapter.pageCount(); page++) {
 			for (int item = 0; item < adapter.itemCountInPage(page); item++) {
-				addView(adapter.view(page, item));
+                View v = adapter.view(page, item);
+                v.setTag(adapter.getItemAt(page,item));
+                addView(v);
 			}
 		}
 		deleteZone.bringToFront();
 	}
+
+    public void reloadViews() {
+        for (int page = 0; page < adapter.pageCount(); page++) {
+            for (int item = 0; item < adapter.itemCountInPage(page); item++) {
+                if(indexOfItem(page, item) == -1) {
+                    View v = adapter.view(page, item);
+                    v.setTag(adapter.getItemAt(page,item));
+                    addView(v);
+                }
+            }
+        }
+        deleteZone.bringToFront();
+    }
+
+    public int indexOfItem(int page, int index) {
+        Object item = adapter.getItemAt(page, index);
+
+        for(int i = 0; i<this.getChildCount(); i++) {
+            View v = this.getChildAt(i);
+            if(item.equals(v.getTag()))
+                return i;
+        }
+        return -1;
+    }
+
+    public void removeItem(int page, int index) {
+        Object item = adapter.getItemAt(page, index);
+        for(int i = 0; i<this.getChildCount(); i++) {
+            View v = (View)this.getChildAt(i);
+            if(item.equals(v.getTag())) {
+                this.removeView(v);
+                return;
+            }
+        }
+    }
 
 	private void animateMoveAllItems() {
 		Animation rotateAnimation = createFastRotateAnimation();
@@ -579,15 +631,17 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void animateOnTheEdge() {
-		View v = getDraggedView();
+        if(!adapter.disableZoomAnimationsOnChangePage()) {
+            View v = getDraggedView();
 
-		ScaleAnimation scale = new ScaleAnimation(.667f, 1.5f, .667f, 1.5f, v.getMeasuredWidth() * 3 / 4, v.getMeasuredHeight() * 3 / 4);
-		scale.setDuration(200);
-		scale.setRepeatMode(Animation.REVERSE);
-		scale.setRepeatCount(Animation.INFINITE);
+            ScaleAnimation scale = new ScaleAnimation(.667f, 1.5f, .667f, 1.5f, v.getMeasuredWidth() * 3 / 4, v.getMeasuredHeight() * 3 / 4);
+            scale.setDuration(200);
+            scale.setRepeatMode(Animation.REVERSE);
+            scale.setRepeatCount(Animation.INFINITE);
 
-		v.clearAnimation();
-		v.startAnimation(scale);
+            v.clearAnimation();
+            v.startAnimation(scale);
+        }
 	}
 
 	private void animateGap(int targetLocationInGrid) {
@@ -896,12 +950,22 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		if (widthMode == MeasureSpec.UNSPECIFIED) {
 			widthSize = display.getWidth();
 		}
+
+        if(adapter.getPageWidth(currentPage()) != 0) {
+            widthSize = adapter.getPageWidth(currentPage());
+        }
+
 		gridPageWidth = widthSize;
 		return widthSize;
 	}
 
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
+
+        //If we don't have pages don't do layout
+        if(adapter.pageCount() == 0)
+            return;
+
 		int pageWidth  = (l + r) / adapter.pageCount();
 
 		for (int page = 0; page < adapter.pageCount(); page++) {

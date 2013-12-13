@@ -129,4 +129,27 @@ public interface PagedDragDropGridAdapter {
      * Tells the grid to show or not the remove drop zone when moving an item
      */
     public boolean showRemoveDropZone();
+
+    /**
+     * Tells the grid, the page defined width
+     * If page width is zero, display width is taken
+     * @return the page width
+     */
+    public int getPageWidth(int page);
+
+    /**
+     * Gets the item displayed by the datasource
+     * @param page the page we are looking at
+     * @param index the index of the datasource
+     * @return your object
+     */
+     public Object getItemAt(int page, int index);
+
+    /**
+     * Tells the grid to disable the zoom animation on change page
+     */
+     public boolean disableZoomAnimationsOnChangePage();
+
+
+
 }
