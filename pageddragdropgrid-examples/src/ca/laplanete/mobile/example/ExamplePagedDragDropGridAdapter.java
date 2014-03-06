@@ -264,5 +264,20 @@ public class ExamplePagedDragDropGridAdapter implements PagedDragDropGridAdapter
     public boolean showRemoveDropZone() {
         return true;
     }
+
+    @Override
+	public int getPageWidth(int page) {
+		return 0;
+	}
+
+	@Override
+	public Object getItemAt(int page, int index) {
+		return getPage(page).getItems().get(index);
+	}
+
+	@Override
+	public boolean disableZoomAnimationsOnChangePage() {
+		return true;
+	}
 	
 }
