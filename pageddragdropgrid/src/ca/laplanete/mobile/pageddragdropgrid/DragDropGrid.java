@@ -29,7 +29,6 @@
 package ca.laplanete.mobile.pageddragdropgrid;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -65,6 +64,8 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private OnClickListener onClickListener = null;
 	private PagedContainer container;
 
+	private List<View> views = new ArrayList<View>(); 
+	
 	private SparseIntArray newPositions = new SparseIntArray();
 
 	private int gridPageWidth = 0;
@@ -125,7 +126,6 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void init() {
-	    
 //	    setBackgroundColor(getContext().getResources().getColor(android.R.color.transparent));
 	    if (isInEditMode() && adapter == null) {
 	        useEditModeAdapter();
@@ -199,21 +199,22 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
                 return true;
             }
 
-            @Override
-            public int getPageWidth(int page) {
-                return 0;
-            }
+			@Override
+			public int getPageWidth(int page) {
+				return 0;
+			}
 
-            @Override
-            public Object getItemAt(int page, int index) {
-                return null;
-            }
+			@Override
+			public Object getItemAt(int page, int index) {
+				return null;
+			}
 
-            @Override
-            public boolean disableZoomAnimationsOnChangePage() {
-                return false;
-            }
-        };       
+			@Override
+			public boolean disableZoomAnimationsOnChangePage() {
+				return false;
+			}
+			
+	    };       
     }
 
     public void setAdapter(PagedDragDropGridAdapter adapter) {
@@ -228,9 +229,13 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private void addChildViews() {
 		for (int page = 0; page < adapter.pageCount(); page++) {
 			for (int item = 0; item < adapter.itemCountInPage(page); item++) {
-                View v = adapter.view(page, item);
+				View v = adapter.view(page, item);
                 v.setTag(adapter.getItemAt(page,item));
-                addView(v);
+				removeView(v); 
+				addView(v);
+				if(v!=deleteZone){
+					views.add(v); 
+				}
 			}
 		}
 		deleteZone.bringToFront();
@@ -270,7 +275,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
             }
         }
     }
-
+	
 	private void animateMoveAllItems() {
 		Animation rotateAnimation = createFastRotateAnimation();
 
@@ -353,16 +358,29 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		getDraggedView().startAnimation(scale);
 	}
 
-	private void reorderChildrenWhenDraggedIsDeleted() {
-		Integer newDraggedPosition = newPositions.get(dragged,dragged);
-
+	private void reorderChildren() {
 		List<View> children = cleanUnorderedChildren();
 		addReorderedChildrenToParent(children);
+		views.clear(); 
+		views.addAll(children); 
+//		requestLayout();
+	}
 
+	private void reorderChildrenWhenDraggedIsDeleted() {
+		int newDraggedPosition = newPositions.get(dragged,dragged);
+
+		List<View> children = cleanUnorderedChildren(); 
+		addReorderedChildrenToParent(children);
+		
 		tellAdapterDraggedIsDeleted(newDraggedPosition);
-		removeViewAt(newDraggedPosition);
+		removeViewAt(newDraggedPosition); 
+		
+		children.remove(newDraggedPosition); 
+		views.clear(); 
+		views.addAll(children); 
 
 		requestLayout();
+		invalidate(); 
 	}
 
 	private void tellAdapterDraggedIsDeleted(Integer newDraggedPosition) {
@@ -548,8 +566,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private void moveDraggedToPreviousPage() {
 		List<View> children = cleanUnorderedChildren();
 
-		List<View> reorderedViews = reeorderView(children);
-
+		List<View> reorderedViews = children; 
 		int draggedEndPosition = newPositions.get(dragged, dragged);
 
 		View draggedView = reorderedViews.get(draggedEndPosition);
@@ -558,6 +575,21 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		int indexFirstElementInCurrentPage = findTheIndexOfFirstElementInCurrentPage();
 
 		int indexOfDraggedOnNewPage = indexFirstElementInCurrentPage-1;		
+		reorderAndAddViews(reorderedViews, draggedView, indexOfDraggedOnNewPage);
+	}
+
+	private void moveDraggedToNextPage() {
+		List<View> children = cleanUnorderedChildren();
+
+		List<View> reorderedViews = children; 
+		int draggedEndPosition = newPositions.get(dragged, dragged);
+
+		View draggedView = reorderedViews.get(draggedEndPosition);
+		reorderedViews.remove(draggedEndPosition);
+
+		int indexLastElementInNextPage = findTheIndexLastElementInNextPage();
+
+		int indexOfDraggedOnNewPage = indexLastElementInNextPage-1;
 		reorderAndAddViews(reorderedViews, draggedView, indexOfDraggedOnNewPage);
 	}
 
@@ -573,22 +605,8 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private void removeItemChildren(List<View> children) {
 		for (View child : children) {
 			removeView(child);
+			views.remove(child); 
 		}
-	}
-
-	private void moveDraggedToNextPage() {
-		List<View> children = cleanUnorderedChildren();
-
-		List<View> reorderedViews = reeorderView(children);
-		int draggedEndPosition = newPositions.get(dragged, dragged);
-
-		View draggedView = reorderedViews.get(draggedEndPosition);
-		reorderedViews.remove(draggedEndPosition);
-
-		int indexLastElementInNextPage = findTheIndexLastElementInNextPage();
-
-		int indexOfDraggedOnNewPage = indexLastElementInNextPage-1;
-		reorderAndAddViews(reorderedViews, draggedView, indexOfDraggedOnNewPage);
 	}
 
     private int findTheIndexLastElementInNextPage() {
@@ -601,13 +619,17 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
     }
 
 	private void reorderAndAddViews(List<View> reorderedViews, View draggedView, int indexOfDraggedOnNewPage) {
-
 		reorderedViews.add(indexOfDraggedOnNewPage,draggedView);
 		newPositions.clear();
 
 		for (View view : reorderedViews) {
 			if (view != null) {
+				removeView(view); 
 				addView(view);
+
+				if(view!=deleteZone){
+					views.add(view); 
+				}
 			}
 		}
 
@@ -631,16 +653,16 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void animateOnTheEdge() {
-        if(!adapter.disableZoomAnimationsOnChangePage()) {
-            View v = getDraggedView();
+		if(!adapter.disableZoomAnimationsOnChangePage()) {
+			View v = getDraggedView();
 
-            ScaleAnimation scale = new ScaleAnimation(.667f, 1.5f, .667f, 1.5f, v.getMeasuredWidth() * 3 / 4, v.getMeasuredHeight() * 3 / 4);
-            scale.setDuration(200);
-            scale.setRepeatMode(Animation.REVERSE);
-            scale.setRepeatCount(Animation.INFINITE);
-
-            v.clearAnimation();
-            v.startAnimation(scale);
+			ScaleAnimation scale = new ScaleAnimation(.667f, 1.5f, .667f, 1.5f, v.getMeasuredWidth() * 3 / 4, v.getMeasuredHeight() * 3 / 4);
+			scale.setDuration(200);
+			scale.setRepeatMode(Animation.REVERSE);
+			scale.setRepeatCount(Animation.INFINITE);
+			
+			v.clearAnimation();
+			v.startAnimation(scale);
         }
 	}
 
@@ -664,7 +686,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		animateMoveToNewPosition(targetView, oldOffset, newOffset);
 		saveNewPositions(targetLocationInGrid, viewAtPosition);
 	}
-
+	
 	private Point computeTranslationEndDeltaRelativeToRealViewPosition(Point oldXY, Point newXY) {
 		return new Point(newXY.x - oldXY.x, newXY.y - oldXY.y);
 	}
@@ -681,9 +703,9 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void saveNewPositions(int targetLocation, int viewAtPosition) {
-		newPositions.put(viewAtPosition, newPositions.get(dragged, dragged));
-		newPositions.put(dragged, targetLocation);
-		tellAdapterToSwapDraggedWithTarget(newPositions.get(dragged, dragged), newPositions.get(viewAtPosition, viewAtPosition));
+		newPositions.put(viewAtPosition, newPositions.get(dragged, dragged)); 
+		newPositions.put(dragged, targetLocation); 
+		tellAdapterToSwapDraggedWithTarget(newPositions.get(dragged, dragged), newPositions.get(viewAtPosition, viewAtPosition)); 
 	}
 
 	private boolean viewWasAlreadyMoved(int targetLocation, int viewAtPosition) {
@@ -793,12 +815,6 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		return container.currentPage();
 	}
 
-	private void reorderChildren() {
-		List<View> children = cleanUnorderedChildren();
-		addReorderedChildrenToParent(children);
-//		requestLayout();
-	}
-
 	private List<View> cleanUnorderedChildren() {
 		List<View> children = saveChildren();
 		removeItemChildren(children);
@@ -806,14 +822,20 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private void addReorderedChildrenToParent(List<View> children) {
-		List<View> reorderedViews = reeorderView(children);
+		List<View> reorderedViews = children; 
+		
 		newPositions.clear();
-
+		views.clear(); 
 		for (View view : reorderedViews) {
-			if (view != null)
+			if (view != null){
+				removeView(view); 
 				addView(view);
-		}
 
+				if(view!=deleteZone){
+					views.add(view); 
+				}
+			}
+		}
 		deleteZone.bringToFront();
 	}
 
@@ -821,30 +843,18 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		List<View> children = new ArrayList<View>();
 		for (int i = 0; i < getItemViewCount(); i++) {
 		    View child;
-		    if (i == dragged) {
-		        child = getDraggedView();
-		    } else {
-		        child = getChildView(i);
-		    }
+		    
+		    int viewPosition = i; 
+		    int index = newPositions.indexOfValue(i); 
+		    if(index>=0){ 
+		    	viewPosition = newPositions.keyAt(index); 
+		    } 
+		    child = getChildView(viewPosition); 
 			
 			child.clearAnimation();
 			children.add(child);
 		}
 		return children;
-	}
-
-	private List<View> reeorderView(List<View> children) {
-		View[] views = new View[children.size()];
-
-		for (int i = 0; i < children.size(); i++) {
-			int position = newPositions.get(i, -1);
-			if (childHasMoved(position)) {
-				views[position] = children.get(i);
-			} else {
-				views[i] = children.get(i);
-			}
-		}
-		return new ArrayList<View>(Arrays.asList(views));
 	}
 
 	private boolean childHasMoved(int position) {
@@ -924,8 +934,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private int getItemViewCount() {
-		// -1 to remove the DeleteZone from the loop
-		return getChildCount()-1;
+		return views.size(); 
 	}
 
 	private void adaptChildrenMeasuresToViewSize(int widthSize, int heightSize) {
@@ -938,6 +947,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private int acknowledgeHeightSize(int heightMode, int heightSize, Display display) {
 		if (heightMode == MeasureSpec.UNSPECIFIED) {
 			heightSize = display.getHeight();
@@ -946,22 +956,22 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 		return heightSize;
 	}
 
+	@SuppressWarnings("deprecation")
 	private int acknowledgeWidthSize(int widthMode, int widthSize, Display display) {
 		if (widthMode == MeasureSpec.UNSPECIFIED) {
 			widthSize = display.getWidth();
 		}
-
+		
         if(adapter.getPageWidth(currentPage()) != 0) {
             widthSize = adapter.getPageWidth(currentPage());
         }
-
+		
 		gridPageWidth = widthSize;
 		return widthSize;
 	}
 
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-
         //If we don't have pages don't do layout
         if(adapter.pageCount() == 0)
             return;
@@ -972,12 +982,12 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 			layoutPage(pageWidth, page);
 		}
 		
-		if (weWereMovingDraggedBetweenPages()) {
+		if (weWereMovingDragged()) {
 		    bringDraggedToFront();
 		}
 	}
 
-    private boolean weWereMovingDraggedBetweenPages() {
+    private boolean weWereMovingDragged() {
         return dragged != -1;
     }
 
@@ -997,7 +1007,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private void layoutAChild(int pageWidth, int page, int col, int row, int childIndex) {
 		int position = positionOfItem(page, childIndex);
 
-		View child = getChildAt(position);
+		View child = views.get(position);
 
 		int left = 0;
 		int top = 0;
@@ -1050,12 +1060,11 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private void bringDraggedToFront() {
 	    View draggedView = getChildAt(dragged);
 	    draggedView.bringToFront();	    
-	    deleteZone.bringToFront();	    	    
+	    deleteZone.bringToFront();	
     }
 
     private View getDraggedView() {
-        return getChildAt(getChildCount()-2);
-//        return getChildAt(dragged);
+    	return views.get(dragged); 
     }
 
     private void animateDragged() {
@@ -1075,7 +1084,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	}
 
 	private boolean aViewIsDragged() {
-		return weWereMovingDraggedBetweenPages();
+		return weWereMovingDragged();
 	}
 
 	private void popDeleteView() {
@@ -1127,22 +1136,15 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 	private int positionForView(View v) {
 		for (int index = 0; index < getItemViewCount(); index++) {
 			View child = getChildView(index);
-				if (isPointInsideView(initialX, initialY, child)) {
-					return index;
-				}
+			if (isPointInsideView(initialX, initialY, child)) {
+				return index;
+			}
 		}
 		return -1;
 	}
 
     private View getChildView(int index) {
-        if (weWereMovingDraggedBetweenPages()) {
-            if (index >= dragged) {
-                return getChildAt(index -1);
-            }
-        } 
-
-        return getChildAt(index);
-        
+        return views.get(index);
     }
 
 	private boolean isPointInsideView(float x, float y, View view) {
