@@ -1,5 +1,8 @@
-PagedDragDropGrid v0.2
-=================
+Note: This component is not in development anymore.  I will merge pull requests, but that’s about it.  
+
+======================
+PagedDragDropGrid v0.2 (deprecated)
+======================
 
 An Android ViewGroup that implements a paged grid with drag'n'drop movable items
 
@@ -12,9 +15,6 @@ Example video:
 v0.1 : http://youtu.be/FYTSRfthSuQ
 
 v0.2 : http://youtu.be/0HI2meKKLYk
-
-
-Note: The Master branch is in active development.  Use tags for a more stable version.
 
 
 Usage
